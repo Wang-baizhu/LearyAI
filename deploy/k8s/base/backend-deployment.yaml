@@ -1,0 +1,54 @@
+# 当前文件职责：部署 Java backend（HTTP + usage gRPC）。
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: leary-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: leary-backend
+  template:
+    metadata:
+      labels:
+        app: leary-backend
+    spec:
+      containers:
+        - name: leary-backend
+          image: leary-backend:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8080
+            - name: usage-grpc
+              containerPort: 9091
+          envFrom:
+            - configMapRef:
+                name: leary-backend-config
+            - secretRef:
+                name: leary-backend-secret
+          startupProbe:
+            httpGet:
+              path: /actuator/health
+              port: http
+            failureThreshold: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: http
+            periodSeconds: 10
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: http
+            periodSeconds: 20
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi

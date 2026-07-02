@@ -1,0 +1,35 @@
+# 该文件职责：构建 tasks_server 容器，安装依赖并启动 MQ 任务消费进程。
+# docker build -f python-backend/docker/taskserver/dockerfile -t leary-task:latest .
+# docker run --cpus=0.5 --memory=1g --env-file python-backend/.env.agent --env-file python-backend/.env.task --name leary-task leary-task:latest
+FROM python:3.12-slim-bullseye
+
+ENV PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=off \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends build-essential libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+RUN mkdir -p /app/logs /root/.kimi/logs /app/workdir
+
+COPY python-backend/docker/taskserver/requirements.txt docker/taskserver/requirements.txt
+COPY python-backend/tasks_server/ tasks_server/
+COPY python-backend/agent_runtime/ agent_runtime/
+COPY python-backend/packages/kaos/ packages/kaos/
+COPY python-backend/packages/kimi-cli/ packages/kimi-cli/
+COPY python-backend/packages/leary-logging/ packages/leary-logging/
+COPY python-backend/packages/kosong/ packages/kosong/
+COPY python-backend/packages/task_events/ packages/task_events/
+COPY python-backend/packages/usage-control/ packages/usage-control/
+
+RUN pip install --upgrade pip setuptools wheel \
+    && pip install -r docker/taskserver/requirements.txt
+
+COPY schema/task/task.command.agent.run.schema.json /schema/task/task.command.agent.run.schema.json
+
+VOLUME ["/app/logs", "/root/.kimi/logs", "/app/workdir"]
+
+CMD ["python", "-m", "tasks_server.runner"]

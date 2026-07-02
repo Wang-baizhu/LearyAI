@@ -1,0 +1,21 @@
+{
+  "name": "@learyai/stress-test",
+  "private": true,
+  "version": "0.0.0",
+  "description": "learyAI stress test entrypoint and scripts",
+  "packageManager": "pnpm@10.30.3",
+  "scripts": {
+    "stress:prepare": "bash ./prepare.sh",
+    "stress:all": "pnpm run stress:backend && pnpm run stress:python-backend",
+    "stress:backend": "k6 run ./backend/recent-visits.k6.js",
+    "stress:backend:usage-single-call": "k6 run ./backend/usage-single-call.k6.js",
+    "stress:backend:usage-single-call-release": "k6 run ./backend/usage-single-call-release.k6.js",
+    "stress:backend:usage-turn-lease": "k6 run ./backend/usage-turn-lease.k6.js",
+    "stress:python-backend": "k6 run ./python-backend/agent-ws-session-query.k6.js",
+    "stress:python-backend:usage-member": "k6 run ./python-backend/agent-ws-usage-control-member.k6.js",
+    "stress:python-backend:usage-non-member": "k6 run ./python-backend/agent-ws-usage-control-non-member.k6.js",
+    "stress:python-backend:usage-scenario-full-success": "k6 run ./python-backend/agent-ws-usage-scenario-full-success.k6.js",
+    "stress:python-backend:usage-scenario-in-session-reject": "k6 run ./python-backend/agent-ws-usage-scenario-in-session-reject.k6.js",
+    "stress:python-backend:usage-scenario-cross-session-reject": "k6 run ./python-backend/agent-ws-usage-scenario-cross-session-reject.k6.js"
+  }
+}

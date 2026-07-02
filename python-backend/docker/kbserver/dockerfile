@@ -1,0 +1,26 @@
+# 该文件职责：构建 kb_server 容器，安装依赖并以 uvicorn 启动 HTTP 接口。
+FROM python:3.12-slim-bullseye
+
+ENV PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=off \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    KIMI_KB_HOST=0.0.0.0 \
+    KIMI_KB_PORT=8001
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends build-essential libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+COPY docker/kbserver/requirements.txt docker/kbserver/requirements.txt
+COPY kb_server/ kb_server/
+COPY packages/leary-logging/ packages/leary-logging/
+COPY packages/knowledge-base/ packages/knowledge-base/
+
+RUN pip install --upgrade pip setuptools wheel \
+    && pip install -r docker/kbserver/requirements.txt
+
+EXPOSE 8001
+
+CMD ["uvicorn", "kb_server.server:app", "--host", "0.0.0.0", "--port", "8001"]

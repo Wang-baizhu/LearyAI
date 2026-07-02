@@ -1,0 +1,90 @@
+# 当前文件职责：定义 python-backend 工作区依赖、uv workspace 与默认索引配置。
+[project]
+name = "python-backend"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "pyinstaller==6.18.0",
+    "inline-snapshot>=0.31.1",
+    "pyright>=1.1.407",
+    "task-events",
+    "ty>=0.0.9",
+    "pytest>=9.0.2",
+    "pytest-asyncio>=1.3.0",
+    "ruff>=0.14.10",
+]
+all-services = [
+    "agent-ws",
+    "kb-server",
+    "tasks-server",
+    "kimi-code",
+  # { include-group = "mineru-develop" }
+]
+ci = [
+    "agent-ws",
+    "tasks-server",
+    "pytest>=9.0.2",
+    "pytest-asyncio>=1.3.0",
+]
+mineru-develop = [
+    "mineru ; python_full_version < '3.14'",
+    "mineru[pipeline] ; python_full_version < '3.14'",
+    "accelerate ; python_full_version < '3.14'",
+]
+
+[tool.uv.workspace]
+members = [
+    "agent_ws",
+    "kb_server",
+    "tasks_server",
+    "packages/usage-control",
+    "packages/leary-logging",
+    "packages/task_events",
+    "packages/kosong",
+    "packages/kaos",
+    "packages/kimi-code",
+    "packages/knowledge-base",
+    "packages/kimi-cli",
+]
+
+[tool.uv.sources]
+agent-ws = { workspace = true }
+kb-server = { workspace = true }
+tasks-server = { workspace = true }
+kosong = { workspace = true }
+pykaos = { workspace = true }
+leary-logging = { workspace = true }
+task-events = { workspace = true }
+knowledge-base = { workspace = true }
+kimi-code = { workspace = true }
+kimi-cli = { workspace = true }
+usage-control = { workspace = true }
+torch = [{ index = "pytorch-cu126", marker = "sys_platform == 'win32' or (sys_platform == 'linux' and platform_machine == 'x86_64')" }]
+torchvision = [{ index = "pytorch-cu126", marker = "sys_platform == 'win32' or (sys_platform == 'linux' and platform_machine == 'x86_64')" }]
+torchaudio = [{ index = "pytorch-cu126", marker = "sys_platform == 'win32' or (sys_platform == 'linux' and platform_machine == 'x86_64')" }]
+paddlepaddle-gpu = [{ index = "paddle-cu126", marker = "sys_platform == 'linux' and platform_machine == 'x86_64'" }]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+
+[tool.inline-snapshot]
+format-command = "ruff format --stdin-filename {filename}"
+
+[[tool.uv.index]]
+name = "pytorch-cu126"
+url = "https://download.pytorch.org/whl/cu126"
+explicit = true
+
+[[tool.uv.index]]
+name = "paddle-cu126"
+url = "https://www.paddlepaddle.org.cn/packages/stable/cu126/"
+explicit = true
+
+[[tool.uv.index]]
+url = "https://pypi.tuna.tsinghua.edu.cn/simple"
+default = true

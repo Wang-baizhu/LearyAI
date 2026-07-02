@@ -1,0 +1,30 @@
+# 当前文件职责：构建本地 PostgreSQL 镜像，在 pgvector 基础上安装 pg_jieba 并启用 preload 配置。
+FROM pgvector/pgvector:pg16
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        build-essential \
+        ca-certificates \
+        cmake \
+        git \
+        postgresql-server-dev-16 \
+        python3 \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /tmp
+
+RUN git clone --depth 1 https://github.com/jaiminpan/pg_jieba.git \
+    && cd /tmp/pg_jieba \
+    && git submodule update --init --recursive \
+    && python3 -c "from pathlib import Path; p = Path('/tmp/pg_jieba/CMakeLists.txt'); text = p.read_text(); needle = 'include_directories(\${PostgreSQL_INCLUDE_DIRS} \${PostgreSQL_TYPE_INCLUDE_DIR})\\n'; insert = needle + 'include_directories(\${PostgreSQL_INCLUDE_DIR} \${PostgreSQL_TYPE_INCLUDE_DIR})\\n'; p.write_text(text if insert in text else text.replace(needle, insert, 1))" \
+    && mkdir build \
+    && cd build \
+    && cmake \
+        -DPostgreSQL_INCLUDE_DIR="$(pg_config --includedir)" \
+        -DPostgreSQL_TYPE_INCLUDE_DIR="$(pg_config --includedir-server)" \
+        -DPostgreSQL_LIBRARY="$(pg_config --libdir)/libpq.so" \
+        .. \
+    && make -j"$(nproc)" \
+    && make install \
+    && echo "shared_preload_libraries = 'pg_jieba'" >> "$(pg_config --sharedir)/postgresql.conf.sample" \
+    && rm -rf /tmp/pg_jieba

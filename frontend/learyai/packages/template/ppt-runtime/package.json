@@ -1,0 +1,14 @@
+{
+  "name": "@leary/template-ppt-runtime",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "main": "./index.ts",
+  "module": "./index.ts",
+  "types": "./index.ts",
+  "exports": {
+    ".": "./index.ts",
+    "./runtime": "./runtime.ts",
+    "./editor": "./editor.ts"
+  }
+}

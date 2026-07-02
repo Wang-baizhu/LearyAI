@@ -1,0 +1,617 @@
+################################################################################
+# Codex config.toml 完整注释模板（基于官方 sample + config reference 整理）
+#
+# 放置位置：
+# - 用户级：~/.codex/config.toml
+# - 项目级：<repo>/.codex/config.toml
+#
+# 说明：
+# - TOML 的“根级键”（如 model、approval_policy）应写在各个 [table] 前面。
+# - 没把握的项可以先保持注释状态。
+# - profile / 项目级配置 / CLI 参数会覆盖这里的默认值。
+################################################################################
+
+################################################################################
+# 一、核心模型与提供方
+################################################################################
+
+# 默认模型。官方示例推荐多数人用 gpt-5.4。
+model = "gpt-5.4"
+
+# 输出风格（仅支持该能力的模型生效）
+# 可选：none | friendly | pragmatic
+# personality = "pragmatic"
+
+# /review 命令专用模型；不设则跟随当前会话模型
+# review_model = "gpt-5.4"
+
+# 当前默认 provider；需对应 [model_providers.<id>]，内建默认是 openai
+model_provider = "openai"
+
+# 当你使用 --oss 时的默认本地 provider；不设则 Codex 询问
+# 可选通常是：ollama | lmstudio
+# oss_provider = "ollama"
+
+# 服务层级偏好
+# 可选：flex | fast
+# 注意：fast 只有在 [features].fast_mode 启用时才会生效
+# service_tier = "flex"
+
+# 手工声明模型上下文窗口（token）
+# 一般不需要，留空让 Codex 自动判断
+# model_context_window = 128000
+
+# 自动 compact 前的 token 阈值
+# model_auto_compact_token_limit = 64000
+
+# 每次工具输出最多保留多少 token 到上下文
+# tool_output_token_limit = 12000
+
+# 启动时读取自定义模型目录 JSON
+# model_catalog_json = "/absolute/path/to/models.json"
+
+# 后台终端空闲轮询最大等待时间（毫秒）
+# 默认 300000 = 5 分钟
+# background_terminal_max_timeout = 300000
+
+# 日志目录；默认是 "$CODEX_HOME/log"
+# log_dir = "/absolute/path/to/codex-logs"
+
+# SQLite 运行时状态目录（可选）
+# sqlite_home = "/absolute/path/to/codex-state"
+
+################################################################################
+# 二、推理与输出细节
+################################################################################
+
+# 推理强度
+# 可选：minimal | low | medium | high | xhigh
+# model_reasoning_effort = "medium"
+
+# 进入 plan mode 时的推理强度
+# 可选：none | minimal | low | medium | high | xhigh
+# plan_mode_reasoning_effort = "high"
+
+# 推理摘要显示级别
+# 可选：auto | concise | detailed | none
+# model_reasoning_summary = "auto"
+
+# GPT-5 系列文本详细程度
+# 可选：low | medium | high
+# model_verbosity = "medium"
+
+# 强制声明当前模型是否支持 reasoning summaries
+# model_supports_reasoning_summaries = true
+
+################################################################################
+# 三、通知
+################################################################################
+
+# 外部通知程序（argv 数组）
+# 例如 Linux 下可以接 notify-send
+# notify = ["notify-send", "Codex"]
+
+################################################################################
+# 四、审批与沙箱
+################################################################################
+
+# 命令审批策略
+# 可选：
+# - "untrusted"   : 只自动执行已知安全只读命令，其他请求审批
+# - "on-request"  : 模型在需要时请求审批（常用）
+# - "never"       : 从不审批，风险高
+# - { reject = { ... } } : 细粒度自动拒绝某些审批提示
+approval_policy = "on-request"
+
+# 细粒度自动拒绝示例：
+# approval_policy = { reject = {
+#   sandbox_approval = true,   # 自动拒绝沙箱提权
+#   rules = false,             # 不自动拒绝规则触发的审批
+#   mcp_elicitations = false   # 不自动拒绝 MCP 的 elicitation 提示
+# } }
+
+# 是否允许 shell 类工具使用 login shell 语义
+# true：允许请求 login = true
+# false：强制非 login shell，并拒绝显式 login 请求
+allow_login_shell = true
+
+# 沙箱模式
+# 可选：
+# - "read-only"          : 只读
+# - "workspace-write"    : 允许写工作区
+# - "danger-full-access" : 基本全放开，风险极高
+sandbox_mode = "read-only"
+
+################################################################################
+# 五、认证与登录
+################################################################################
+
+# CLI 登录凭据存储位置
+# 可选：file | keyring | auto
+cli_auth_credentials_store = "file"
+
+# ChatGPT 登录流程使用的 base URL（不是 OpenAI API base URL）
+chatgpt_base_url = "https://chatgpt.com/backend-api/"
+
+################################################################################
+# 六、项目根与文件打开器
+################################################################################
+
+# 项目根识别标记；默认常见是 [".git"]
+# 设为空数组 [] 表示不向上找父目录，当前目录即项目根
+# project_root_markers = [".git"]
+
+# 点击引用时的打开方式
+# 可选：vscode | vscode-insiders | windsurf | cursor | none
+file_opener = "vscode"
+
+################################################################################
+# 七、界面与杂项
+################################################################################
+
+# 隐藏内部 reasoning 事件
+hide_agent_reasoning = false
+
+# 显示原始 reasoning 内容（如果可用）
+show_raw_agent_reasoning = false
+
+# 禁用 TUI 的“突发粘贴检测”
+disable_paste_burst = false
+
+# Windows/WSL 引导确认状态（通常由程序自己维护）
+windows_wsl_setup_acknowledged = false
+
+# 启动时检查更新
+check_for_update_on_startup = true
+
+################################################################################
+# 八、Web Search
+################################################################################
+
+# Web 搜索模式
+# 可选：disabled | cached | live
+# - cached：使用 OpenAI 维护的缓存索引
+# - live：实时网页
+# 默认通常是 cached；在 full-access / yolo 场景下会倾向 live
+web_search = "cached"
+
+# 启动时自动应用的 profile 名
+# profile = "default"
+
+# 抑制“不稳定功能已启用”的告警
+# suppress_unstable_features_warning = true
+
+################################################################################
+# 九、多 Agent / 子 Agent
+################################################################################
+
+[agents]
+
+# 同时打开的 agent 线程最大数
+# 默认 6
+# max_threads = 6
+
+# 最大嵌套深度；根会话是 0
+# 默认 1
+# max_depth = 1
+
+# spawn_agents_on_csv 作业里，每个 worker 的默认超时（秒）
+# 不设置时默认 1800
+# job_max_runtime_seconds = 1800
+
+# 自定义 agent 角色示例
+# [agents.reviewer]
+# description = "Find correctness, security, and test risks in code."
+# config_file = "./agents/reviewer.toml"   # 相对路径基于声明它的 config.toml
+# nickname_candidates = ["Athena", "Ada"]
+
+################################################################################
+# 十、Skills
+################################################################################
+
+# 对某个 skill 做启用/禁用覆盖
+[[skills.config]]
+# path = "/path/to/skill/SKILL.md"
+# enabled = false
+
+################################################################################
+# 十一、workspace-write 沙箱细节
+################################################################################
+
+[sandbox_workspace_write]
+
+# 除当前工作区之外，额外允许写的目录
+writable_roots = []
+
+# 是否允许沙箱内访问外网
+network_access = false
+
+# 是否把 $TMPDIR 从可写根中排除
+exclude_tmpdir_env_var = false
+
+# 是否把 /tmp 从可写根中排除
+exclude_slash_tmp = false
+
+################################################################################
+# 十二、子进程环境变量策略
+################################################################################
+
+[shell_environment_policy]
+
+# 继承父进程环境变量的策略
+# 可选：all | core | none
+inherit = "all"
+
+# 是否忽略默认排除规则（默认会过滤包含 KEY/SECRET/TOKEN 的变量名）
+ignore_default_excludes = false
+
+# 需要排除的环境变量 glob（大小写不敏感）
+# 例如 ["AWS_*", "AZURE_*"]
+exclude = []
+
+# 强制设置 / 覆盖的环境变量
+set = {}
+
+# 白名单；非空时只保留这里匹配到的变量
+include_only = []
+
+# 实验项：通过用户 shell profile 运行
+experimental_use_profile = false
+
+################################################################################
+# 十三、受管网络代理 / 网络权限
+################################################################################
+
+[permissions.network]
+
+# 是否启用受管网络层
+# enabled = true
+
+# HTTP 代理地址
+# proxy_url = "http://127.0.0.1:43128"
+
+# 管理接口地址
+# admin_url = "http://127.0.0.1:43129"
+
+# 启用 SOCKS5
+# enable_socks5 = false
+
+# SOCKS5 地址
+# socks_url = "http://127.0.0.1:43130"
+
+# 允许 SOCKS5 UDP
+# enable_socks5_udp = false
+
+# 是否允许继续级联上游代理
+# allow_upstream_proxy = false
+
+# 危险选项：允许非 loopback 代理地址
+# dangerously_allow_non_loopback_proxy = false
+
+# 危险选项：允许非 loopback 管理地址
+# dangerously_allow_non_loopback_admin = false
+
+# 危险选项：允许全部 Unix socket
+# dangerously_allow_all_unix_sockets = false
+
+# 网络模式
+# 可选：limited | full
+# mode = "limited"
+
+# 域名白名单
+# allowed_domains = ["api.openai.com"]
+
+# 域名黑名单
+# denied_domains = ["example.com"]
+
+# 允许访问的 Unix socket
+# allow_unix_sockets = ["/var/run/docker.sock"]
+
+# 是否允许本地绑定
+# allow_local_binding = false
+
+################################################################################
+# 十四、历史记录
+################################################################################
+
+[history]
+
+# 会话持久化
+# 可选：save-all | none
+persistence = "save-all"
+
+# history 文件最大字节数；超出后从最旧记录开始裁剪
+# max_bytes = 5242880
+
+################################################################################
+# 十五、TUI / 终端界面
+################################################################################
+
+[tui]
+
+# 桌面通知
+# 可以是：
+# - true / false
+# - 或具体事件数组，如 ["agent-turn-complete", "approval-requested"]
+notifications = false
+
+# 终端通知方式
+# 可选：auto | osc9 | bel
+# notification_method = "auto"
+
+# 欢迎页 / 状态 / spinner 动画
+animations = true
+
+# 是否显示欢迎页 tooltip
+show_tooltips = true
+
+# 是否使用 alternate screen
+# 常见可选值通常由 Codex 自动处理，auto 在 Zellij 下会避免吃掉滚动缓冲
+# alternate_screen = "auto"
+
+# 底部状态栏项目顺序；设 [] 可隐藏
+# 官方默认常见为 ["model-with-reasoning", "context-remaining", "current-dir"]
+# status_line = ["model", "context-remaining", "git-branch"]
+
+# 语法高亮主题
+# 也可以把自定义 .tmTheme 放到 $CODEX_HOME/themes
+# theme = "catppuccin-mocha"
+
+# 模型可用性提示状态（通常由 Codex 自己维护）
+# [tui.model_availability_nux]
+# "gpt-5.4" = 1
+
+################################################################################
+# 十六、Analytics / Feedback / Notice
+################################################################################
+
+[analytics]
+# 是否启用 analytics
+enabled = true
+
+[feedback]
+# 是否允许通过 /feedback 提交反馈
+enabled = true
+
+[notice]
+# 以下通常由 Codex 自己写入，用来隐藏一次性提示
+# hide_full_access_warning = true
+# hide_world_writable_warning = true
+# hide_rate_limit_model_nudge = true
+# hide_gpt5_1_migration_prompt = true
+# "hide_gpt-5.1-codex-max_migration_prompt" = true
+
+# 模型迁移提示映射
+# model_migrations = { "gpt-4.1" = "gpt-5.1" }
+
+################################################################################
+# 十七、功能开关（推荐集中放这里）
+################################################################################
+
+[features]
+
+# 保持空表即可使用默认值。需要显式启用/禁用时再设布尔值。
+# shell_tool = true
+# apps = false
+# apps_mcp_gateway = false
+# unified_exec = false
+# shell_snapshot = false
+# personality = true
+# use_linux_sandbox_bwrap = false
+# runtime_metrics = true
+# powershell_utf8 = true
+# child_agents_md = false
+# sqlite = true
+# fast_mode = true
+# enable_request_compression = true
+# image_generation = false
+# skill_mcp_dependency_install = true
+# skill_env_var_dependency_prompt = false
+# default_mode_request_user_input = false
+# artifact = false
+# prevent_idle_sleep = false
+# responses_websockets = false
+# responses_websockets_v2 = false
+# image_detail_original = false
+
+################################################################################
+# 十八、MCP 服务器
+################################################################################
+
+[mcp_servers]
+
+# ---- STDIO 类型 MCP 示例 ----
+# [mcp_servers.docs]
+# enabled = true
+# required = true
+# command = "docs-server"
+# args = ["--port", "4000"]
+# env = { "API_KEY" = "value" }                 # 静态环境变量
+# env_vars = ["ANOTHER_SECRET"]                 # 从父环境透传的变量名
+# cwd = "/path/to/server"
+# startup_timeout_sec = 10.0
+# startup_timeout_ms = 10000                    # 与 startup_timeout_sec 等价的毫秒写法
+# tool_timeout_sec = 60.0
+# enabled_tools = ["search", "summarize"]       # allow-list
+# disabled_tools = ["slow-tool"]                # deny-list，后应用
+# scopes = ["read:docs"]                        # OAuth scopes
+# oauth_resource = "https://docs.example.com/"  # OAuth resource
+
+# ---- Streamable HTTP 类型 MCP 示例 ----
+# [mcp_servers.github]
+# enabled = true
+# required = true
+# url = "https://github-mcp.example.com/mcp"
+# bearer_token_env_var = "GITHUB_TOKEN"         # Authorization: Bearer <token>
+# http_headers = { "X-Example" = "value" }      # 静态 HTTP 头
+# env_http_headers = { "X-Auth" = "AUTH_ENV" }  # 从环境变量取 header 值
+# startup_timeout_sec = 10.0
+# tool_timeout_sec = 60.0
+# enabled_tools = ["list_issues"]
+# disabled_tools = ["delete_issue"]
+# scopes = ["repo"]
+
+################################################################################
+# 十九、Model Providers
+################################################################################
+
+[model_providers]
+
+# 内建 provider 一般包括：
+# - openai
+# - ollama
+# - lmstudio
+
+# ---- OpenAI / 数据驻留 / 自定义 base_url 示例 ----
+# [model_providers.openaidr]
+# name = "OpenAI Data Residency"
+# base_url = "https://us.api.openai.com/v1"
+# wire_api = "responses"                        # 当前文档里支持值为 responses
+# requires_openai_auth = true
+# request_max_retries = 4                       # 默认 4，最大 100
+# stream_max_retries = 5                        # 默认 5，最大 100
+# stream_idle_timeout_ms = 300000               # 默认 300000 = 5 分钟
+# supports_websockets = true
+# experimental_bearer_token = "sk-example"      # 开发/测试用途，慎用
+# http_headers = { "X-Example" = "value" }
+# env_http_headers = {
+#   "OpenAI-Organization" = "OPENAI_ORGANIZATION",
+#   "OpenAI-Project" = "OPENAI_PROJECT"
+# }
+
+# ---- Azure / OpenAI-compatible provider 示例 ----
+# [model_providers.azure]
+# name = "Azure"
+# base_url = "https://YOUR_PROJECT_NAME.openai.azure.com/openai"
+# wire_api = "responses"
+# query_params = { api-version = "2025-04-01-preview" }
+# env_key = "AZURE_OPENAI_API_KEY"
+# env_key_instructions = "Set AZURE_OPENAI_API_KEY in your environment"
+# supports_websockets = false
+
+# ---- 本地 OSS provider 示例 ----
+# [model_providers.ollama]
+# name = "Ollama"
+# base_url = "http://localhost:11434/v1"
+# wire_api = "responses"
+
+################################################################################
+# 二十、Apps / Connectors
+################################################################################
+
+[apps]
+
+# 默认对所有 app 生效的设置
+# [apps._default]
+# enabled = true
+# destructive_enabled = true      # 允许 destructive_hint = true 的工具
+# open_world_enabled = true       # 允许开放世界交互能力
+
+# 单个 app 覆盖示例
+# [apps.google_drive]
+# enabled = false
+# destructive_enabled = false
+# default_tools_enabled = true
+# default_tools_approval_mode = "prompt"   # auto | prompt | approve
+
+# 单个工具级覆盖示例
+# [apps.google_drive.tools."files/delete"]
+# enabled = false
+# approval_mode = "approve"
+
+################################################################################
+# 二十一、Profiles（命名预设）
+################################################################################
+
+[profiles]
+
+# [profiles.default]
+# model = "gpt-5.4"
+# model_provider = "openai"
+# approval_policy = "on-request"
+# sandbox_mode = "read-only"
+# service_tier = "flex"
+# oss_provider = "ollama"
+# model_reasoning_effort = "medium"
+# plan_mode_reasoning_effort = "high"
+# model_reasoning_summary = "auto"
+# model_verbosity = "medium"
+# personality = "pragmatic"    # none | friendly | pragmatic
+# chatgpt_base_url = "https://chatgpt.com/backend-api/"
+# model_catalog_json = "./models.json"
+# model_instructions_file = "/absolute/or/relative/path/to/instructions.txt"
+# experimental_compact_prompt_file = "./compact_prompt.txt"
+# tools_view_image = true
+# features = { unified_exec = false }
+
+################################################################################
+# 二十二、Projects（信任级别）
+################################################################################
+
+[projects]
+
+# 显式标记某个路径 trusted / untrusted
+# 只有 trusted 项目才会加载项目里的 .codex/config.toml
+# [projects."/absolute/path/to/project"]
+# trust_level = "trusted"   # 或 "untrusted"
+
+################################################################################
+# 二十三、Tools
+################################################################################
+
+[tools]
+
+# 是否启用 view_image 工具
+# view_image = true
+
+################################################################################
+# 二十四、OpenTelemetry（默认关闭）
+################################################################################
+
+[otel]
+
+# 是否把用户 prompt 文本写入日志
+log_user_prompt = false
+
+# 环境标签
+environment = "dev"
+
+# 日志 exporter
+# 可选：none | otlp-http | otlp-grpc
+exporter = "none"
+
+# Trace exporter
+# 可选：none | otlp-http | otlp-grpc
+trace_exporter = "none"
+
+# Metrics exporter
+# 可选：none | statsig | otlp-http | otlp-grpc
+metrics_exporter = "statsig"
+
+# ---- OTLP/HTTP 示例 ----
+# [otel.exporter."otlp-http"]
+# endpoint = "https://otel.example.com/v1/logs"
+# protocol = "binary"   # binary | json
+
+# [otel.exporter."otlp-http".headers]
+# "x-otlp-api-key" = "${OTLP_TOKEN}"
+
+# [otel.exporter."otlp-http".tls]
+# ca-certificate = "certs/otel-ca.pem"
+# client-certificate = "/etc/codex/certs/client.pem"
+# client-private-key = "/etc/codex/certs/client-key.pem"
+
+# ---- OTLP/gRPC trace exporter 示例 ----
+# [otel.trace_exporter."otlp-grpc"]
+# endpoint = "https://otel.example.com:4317"
+# headers = { "x-otlp-meta" = "abc123" }
+
+################################################################################
+# 二十五、Windows
+################################################################################
+
+[windows]
+
+# Windows 原生沙箱模式
+# 可选：unelevated | elevated
+sandbox = "unelevated"

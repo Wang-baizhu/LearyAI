@@ -1,0 +1,69 @@
+# 当前文件职责：配置 Fluent Bit 采集容器标准输出日志并发送到 Loki。
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluent-bit-config
+  namespace: observability
+  labels:
+    app: fluent-bit
+data:
+  fluent-bit.conf: |
+    [SERVICE]
+        Flush           1
+        Daemon          Off
+        Log_Level       info
+        Parsers_File    parsers.conf
+        HTTP_Server     On
+        HTTP_Listen     0.0.0.0
+        HTTP_PORT       2020
+
+    [INPUT]
+        Name              tail
+        Path              /var/log/containers/*.log
+        Parser            cri
+        Tag               kube.*
+        Mem_Buf_Limit     50MB
+        Skip_Long_Lines   On
+        Refresh_Interval  10
+        DB                /var/log/flb_kube.db
+        DB.Sync           normal
+
+    [FILTER]
+        Name                kubernetes
+        Match               kube.*
+        Kube_URL            https://kubernetes.default.svc:443
+        Merge_Log           Off
+        K8S-Logging.Parser  On
+        K8S-Logging.Exclude On
+        Labels              On
+        Annotations         Off
+
+    [FILTER]
+        Name          parser
+        Match         kube.*
+        Key_Name      log
+        Parser        json
+        Reserve_Data  On
+        Preserve_Key  On
+
+    [OUTPUT]
+        Name          loki
+        Match         kube.*
+        Host          loki.observability.svc.cluster.local
+        Port          3100
+        URI           /loki/api/v1/push
+        Labels        job=fluent-bit,namespace=$kubernetes['namespace_name'],app=$kubernetes['labels']['app'],pod=$kubernetes['pod_name'],container=$kubernetes['container_name']
+        Line_Format   json
+        Auto_Kubernetes_Labels Off
+
+  parsers.conf: |
+    [PARSER]
+        Name         cri
+        Format       regex
+        Regex        ^(?<time>[^ ]+) (?<stream>stdout|stderr) (?<logtag>[^ ]*) (?<log>.*)$
+        Time_Key     time
+        Time_Format  %Y-%m-%dT%H:%M:%S.%L%z
+
+    [PARSER]
+        Name         json
+        Format       json

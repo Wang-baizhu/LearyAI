@@ -1,0 +1,109 @@
+{
+  "$schema" : "https://json-schema.org/draft/2020-12/schema",
+  "$defs" : {
+    "AgentPayload" : {
+      "type" : "object",
+      "properties" : {
+        "agentSessionId" : {
+          "type" : "string"
+        },
+        "agentTaskType" : {
+          "type" : "string",
+          "minLength" : 1
+        },
+        "docRefs" : {
+          "type" : "array",
+          "items" : {
+            "$ref" : "#/$defs/TaskDocRef"
+          }
+        },
+        "extraInfo" : {
+          "type" : "string"
+        },
+        "modelConfigType" : {
+          "type" : "string"
+        },
+        "pluginId" : {
+          "type" : "string"
+        },
+        "promptVars" : {
+          "$ref" : "#/$defs/Map(String,String)"
+        },
+        "typeId" : {
+          "type" : "string"
+        }
+      },
+      "required" : [ "agentTaskType" ]
+    },
+    "Map(String,String)" : {
+      "type" : "object",
+      "additionalProperties" : {
+        "type" : "string"
+      }
+    },
+    "TaskDocRef" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "string",
+          "minLength" : 1
+        },
+        "name" : {
+          "type" : "string"
+        }
+      },
+      "required" : [ "id" ]
+    }
+  },
+  "type" : "object",
+  "properties" : {
+    "kbId" : {
+      "type" : "string"
+    },
+    "messageId" : {
+      "type" : "string",
+      "minLength" : 1
+    },
+    "occurredAt" : {
+      "type" : "string",
+      "minLength" : 1
+    },
+    "parentTaskRecordId" : {
+      "type" : "integer"
+    },
+    "payload" : {
+      "$ref" : "#/$defs/AgentPayload"
+    },
+    "producer" : {
+      "type" : "string",
+      "minLength" : 1
+    },
+    "projectId" : {
+      "type" : "string"
+    },
+    "schemaVersion" : {
+      "type" : "string",
+      "minLength" : 1
+    },
+    "stageRunKey" : {
+      "type" : "string",
+      "minLength" : 1
+    },
+    "taskRecordId" : {
+      "type" : "integer"
+    },
+    "taskType" : {
+      "type" : "string",
+      "minLength" : 1
+    },
+    "traceId" : {
+      "type" : "string",
+      "minLength" : 1
+    },
+    "userId" : {
+      "type" : "integer"
+    }
+  },
+  "required" : [ "messageId", "schemaVersion", "occurredAt", "traceId", "producer", "taskRecordId", "taskType", "stageRunKey", "payload" ],
+  "title" : "task.command.agent.run"
+}

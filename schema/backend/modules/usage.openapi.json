@@ -1,0 +1,120 @@
+{
+  "components": {
+    "schemas": {
+      "ApiResponseUsageCurrentCycleResponse": {
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "data": {
+            "$ref": "#/components/schemas/UsageCurrentCycleResponse"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "UsageCurrentCycleResponse": {
+        "properties": {
+          "available": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "cycleId": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "metric": {
+            "type": "string"
+          },
+          "projectId": {
+            "type": "string"
+          },
+          "quota": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "reserved": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "updatedAt": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "used": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "userId": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "validFrom": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "validTo": {
+            "format": "date-time",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "title": "OpenAPI definition",
+    "version": "v0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/api/usage/current-cycle": {
+      "get": {
+        "operationId": "currentCycleUsage",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "projectId",
+            "required": true,
+            "schema": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "metric",
+            "required": true,
+            "schema": {
+              "minLength": 1,
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiResponseUsageCurrentCycleResponse"
+                }
+              }
+            },
+            "description": "OK"
+          }
+        },
+        "tags": [
+          "usage-controller"
+        ]
+      }
+    }
+  },
+  "servers": [
+    {
+      "description": "Generated server url",
+      "url": "http://127.0.0.1:18080"
+    }
+  ]
+}

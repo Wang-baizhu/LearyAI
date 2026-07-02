@@ -1,0 +1,327 @@
+syntax = "proto3";
+
+package usage.v1;
+
+option java_multiple_files = false;
+option java_package = "com.notebook.learyAI.module.usageservice.interfaces.grpc.proto";
+option java_outer_classname = "UsageServiceProto";
+
+service UsageService {
+  rpc ReserveUsage (ReserveUsageRequest) returns (ReserveUsageResponse);
+  rpc CommitUsage (CommitUsageRequest) returns (CommitUsageResponse);
+  rpc ReleaseUsage (ReleaseUsageRequest) returns (ReleaseUsageResponse);
+  rpc GetCurrentCycleUsage (GetCurrentCycleUsageRequest) returns (GetCurrentCycleUsageResponse);
+  rpc GetRollingUsage (GetRollingUsageRequest) returns (GetRollingUsageResponse);
+}
+
+service UsageControlService {
+  rpc GetCurrentPolicy (GetCurrentPolicyRequest) returns (GetCurrentPolicyResponse);
+  rpc OpenTurnLease (OpenTurnLeaseRequest) returns (OpenTurnLeaseResponse);
+  rpc CommitTurnCallUsage (CommitTurnCallUsageRequest) returns (CommitTurnCallUsageResponse);
+  rpc CloseTurnLease (CloseTurnLeaseRequest) returns (CloseTurnLeaseResponse);
+  rpc AbortTurnLease (AbortTurnLeaseRequest) returns (AbortTurnLeaseResponse);
+  rpc GetTurnLease (GetTurnLeaseRequest) returns (GetTurnLeaseResponse);
+  rpc ReserveSingleCall (ReserveSingleCallRequest) returns (ReserveSingleCallResponse);
+  rpc CommitSingleCall (CommitSingleCallRequest) returns (CommitSingleCallResponse);
+  rpc ReleaseSingleCall (ReleaseSingleCallRequest) returns (ReleaseSingleCallResponse);
+}
+
+message ReserveUsageRequest {
+  int64 user_id = 1;
+  string project_id = 2;
+  string metric = 3;
+  string reservation_id = 4;
+  string request_id = 5;
+  int64 requested_amount = 6;
+  int64 reservation_ttl_seconds = 7;
+  map<string, string> metadata = 8;
+}
+
+message ReserveUsageResponse {
+  bool success = 1;
+  bool reserved = 2;
+  UsageReservation reservation = 3;
+  CurrentCycleUsage current_cycle = 4;
+}
+
+message CommitUsageRequest {
+  int64 user_id = 1;
+  string project_id = 2;
+  string metric = 3;
+  string reservation_id = 4;
+  string request_id = 5;
+  int64 requested_amount = 6;
+  int64 actual_amount = 7;
+  string idempotency_key = 8;
+  string source_type = 9;
+  string source_id = 10;
+  map<string, string> metadata = 11;
+  string occurred_at = 12;
+}
+
+message CommitUsageResponse {
+  bool success = 1;
+  bool applied = 2;
+  UsageEvent event = 3;
+  CurrentCycleUsage current_cycle = 4;
+}
+
+message ReleaseUsageRequest {
+  int64 user_id = 1;
+  string project_id = 2;
+  string metric = 3;
+  string reservation_id = 4;
+  string request_id = 5;
+}
+
+message ReleaseUsageResponse {
+  bool success = 1;
+  bool released = 2;
+  CurrentCycleUsage current_cycle = 3;
+}
+
+message GetCurrentCycleUsageRequest {
+  int64 user_id = 1;
+  string project_id = 2;
+  string metric = 3;
+}
+
+message GetCurrentCycleUsageResponse {
+  CurrentCycleUsage current_cycle = 1;
+}
+
+message GetRollingUsageRequest {
+  int64 user_id = 1;
+  string project_id = 2;
+  string metric = 3;
+  string window_type = 4;
+}
+
+message GetRollingUsageResponse {
+  RollingUsage rolling_usage = 1;
+}
+
+message UsageReservation {
+  string reservation_id = 1;
+  string request_id = 2;
+  int64 user_id = 3;
+  string project_id = 4;
+  string metric = 5;
+  int64 reserved_amount = 6;
+  string status = 7;
+  string expires_at = 8;
+  string updated_at = 9;
+}
+
+message CurrentCycleUsage {
+  int64 user_id = 1;
+  string project_id = 2;
+  string metric = 3;
+  int64 cycle_id = 4;
+  int64 used = 5;
+  int64 reserved = 6;
+  int64 quota = 7;
+  int64 available = 8;
+  string valid_from = 9;
+  string valid_to = 10;
+  string updated_at = 11;
+}
+
+message RollingUsage {
+  int64 user_id = 1;
+  string project_id = 2;
+  string metric = 3;
+  string window_type = 4;
+  int64 used = 5;
+  string window_start = 6;
+  string window_end = 7;
+  string updated_at = 8;
+}
+
+message UsageEvent {
+  int64 id = 1;
+  int64 user_id = 2;
+  string project_id = 3;
+  string metric = 4;
+  int64 delta = 5;
+  string occurred_at = 6;
+  string idempotency_key = 7;
+  string source_type = 8;
+  string source_id = 9;
+  map<string, string> metadata = 10;
+  string created_at = 11;
+}
+
+enum UsagePolicyMode {
+  USAGE_POLICY_MODE_UNSPECIFIED = 0;
+  USAGE_POLICY_MODE_NON_MEMBER = 1;
+  USAGE_POLICY_MODE_MEMBER = 2;
+}
+
+message CurrentUsagePolicy {
+  int64 user_id = 1;
+  string project_id = 2;
+  string metric = 3;
+  int64 cycle_id = 4;
+  string plan_id = 5;
+  int64 quota = 6;
+  int64 used = 7;
+  int64 reserved = 8;
+  int64 available = 9;
+  UsagePolicyMode policy_mode = 10;
+  string valid_from = 11;
+  string valid_to = 12;
+  string updated_at = 13;
+}
+
+message TurnLease {
+  string lease_id = 1;
+  int64 user_id = 2;
+  string project_id = 3;
+  string metric = 4;
+  string turn_id = 5;
+  string plan_id = 6;
+  string status = 7;
+  string created_at = 8;
+  string updated_at = 9;
+  string expires_at = 10;
+}
+
+message GetCurrentPolicyRequest {
+  int64 user_id = 1;
+  string project_id = 2;
+  string metric = 3;
+}
+
+message GetCurrentPolicyResponse {
+  CurrentUsagePolicy current_policy = 1;
+}
+
+message OpenTurnLeaseRequest {
+  int64 user_id = 1;
+  string project_id = 2;
+  string metric = 3;
+  string turn_id = 4;
+  string lease_id = 5;
+  string idempotency_key = 6;
+  int64 lease_ttl_seconds = 7;
+  map<string, string> metadata = 8;
+}
+
+message OpenTurnLeaseResponse {
+  bool success = 1;
+  bool opened = 2;
+  TurnLease lease = 3;
+  CurrentUsagePolicy current_policy = 4;
+}
+
+message CommitTurnCallUsageRequest {
+  int64 user_id = 1;
+  string project_id = 2;
+  string metric = 3;
+  string lease_id = 4;
+  string turn_id = 5;
+  string call_id = 6;
+  int64 actual_amount = 7;
+  string idempotency_key = 8;
+  string source_type = 9;
+  string source_id = 10;
+  map<string, string> metadata = 11;
+  string occurred_at = 12;
+}
+
+message CommitTurnCallUsageResponse {
+  bool success = 1;
+  bool applied = 2;
+  TurnLease lease = 3;
+  CurrentUsagePolicy current_policy = 4;
+  UsageEvent event = 5;
+}
+
+message CloseTurnLeaseRequest {
+  int64 user_id = 1;
+  string lease_id = 2;
+  string turn_id = 3;
+  string idempotency_key = 4;
+}
+
+message CloseTurnLeaseResponse {
+  bool success = 1;
+  bool closed = 2;
+  TurnLease lease = 3;
+}
+
+message AbortTurnLeaseRequest {
+  int64 user_id = 1;
+  string lease_id = 2;
+  string turn_id = 3;
+  string idempotency_key = 4;
+}
+
+message AbortTurnLeaseResponse {
+  bool success = 1;
+  bool aborted = 2;
+  TurnLease lease = 3;
+}
+
+message GetTurnLeaseRequest {
+  string lease_id = 1;
+}
+
+message GetTurnLeaseResponse {
+  TurnLease lease = 1;
+}
+
+message ReserveSingleCallRequest {
+  int64 user_id = 1;
+  string project_id = 2;
+  string metric = 3;
+  string reservation_id = 4;
+  string request_id = 5;
+  int64 requested_amount = 6;
+  int64 reservation_ttl_seconds = 7;
+  map<string, string> metadata = 8;
+}
+
+message ReserveSingleCallResponse {
+  bool success = 1;
+  bool reserved = 2;
+  UsageReservation reservation = 3;
+  CurrentUsagePolicy current_policy = 4;
+}
+
+message CommitSingleCallRequest {
+  int64 user_id = 1;
+  string project_id = 2;
+  string metric = 3;
+  string reservation_id = 4;
+  string request_id = 5;
+  int64 requested_amount = 6;
+  int64 actual_amount = 7;
+  string idempotency_key = 8;
+  string source_type = 9;
+  string source_id = 10;
+  map<string, string> metadata = 11;
+  string occurred_at = 12;
+}
+
+message CommitSingleCallResponse {
+  bool success = 1;
+  bool applied = 2;
+  UsageEvent event = 3;
+  CurrentUsagePolicy current_policy = 4;
+}
+
+message ReleaseSingleCallRequest {
+  int64 user_id = 1;
+  string project_id = 2;
+  string metric = 3;
+  string reservation_id = 4;
+  string request_id = 5;
+}
+
+message ReleaseSingleCallResponse {
+  bool success = 1;
+  bool released = 2;
+  CurrentUsagePolicy current_policy = 3;
+}

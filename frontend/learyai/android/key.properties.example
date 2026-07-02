@@ -1,0 +1,5 @@
+# 当前文件职责：提供 Android release 签名配置示例，真实签名材料仅保留在本地。
+storeFile=../your-release.keystore
+storePassword=replace-me
+keyAlias=replace-me
+keyPassword=replace-me

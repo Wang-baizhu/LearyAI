@@ -1,0 +1,96 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="2.2" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <style>
+    .bg {
+      transform-origin: 64px 64px;
+      animation: bgPulse 4s ease-in-out infinite;
+    }
+
+    .workspace {
+      transform-origin: 64px 64px;
+      animation: floatCard 3.2s ease-in-out infinite;
+    }
+
+    .node1 {
+      animation: blink 2.2s ease-in-out infinite;
+    }
+
+    .node2 {
+      animation: blink 2.2s ease-in-out infinite 0.4s;
+    }
+
+    .node3 {
+      animation: blink 2.2s ease-in-out infinite 0.8s;
+    }
+
+    .sparkle {
+      transform-origin: 92px 41px;
+      animation: sparkleTwinkle 2.8s ease-in-out infinite;
+    }
+
+    .link {
+      animation: linkGlow 2.4s ease-in-out infinite;
+    }
+
+    @keyframes bgPulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.02); opacity: 0.97; }
+    }
+
+    @keyframes floatCard {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-2.5px); }
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.65; transform: scale(1.12); }
+    }
+
+    @keyframes sparkleTwinkle {
+      0%, 100% { transform: scale(1) rotate(0deg); opacity: 1; }
+      50% { transform: scale(1.1) rotate(8deg); opacity: 0.8; }
+    }
+
+    @keyframes linkGlow {
+      0%, 100% { opacity: 0.9; }
+      50% { opacity: 0.4; }
+    }
+  </style>
+
+  <!-- 背景 -->
+  <rect class="bg" x="12" y="12" width="104" height="104" rx="28" fill="#09A79D"/>
+
+  <!-- 主体 -->
+  <g class="workspace">
+    <rect x="32" y="38" width="64" height="52" rx="14" fill="#FFFFFF"/>
+
+    <!-- 知识页 -->
+    <path d="M44 50C44 46.6863 46.6863 44 50 44H62V84H50C46.6863 84 44 81.3137 44 78V50Z" fill="#E7F7F5"/>
+    <path d="M84 50C84 46.6863 81.3137 44 78 44H66V84H78C81.3137 84 84 81.3137 84 78V50Z" fill="#D2F0EC"/>
+
+    <!-- 中线 -->
+    <rect x="63" y="44" width="2" height="40" rx="1" fill="#09A79D"/>
+
+    <!-- 节点 -->
+    <circle class="node1" cx="50" cy="58" r="3" fill="#067C74"/>
+    <circle class="node2" cx="78" cy="58" r="3" fill="#067C74"/>
+    <circle class="node3" cx="64" cy="70" r="3.5" fill="#067C74" filter="url(#softGlow)"/>
+
+    <!-- 连线 -->
+    <path class="link" d="M52.5 59.5L61 67" stroke="#067C74" stroke-width="2.5" stroke-linecap="round"/>
+    <path class="link" d="M75.5 59.5L67 67" stroke="#067C74" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+
+  <!-- AI 星芒 -->
+  <path class="sparkle" d="M92 32L94.5 38.5L101 41L94.5 43.5L92 50L89.5 43.5L83 41L89.5 38.5L92 32Z" fill="#BFEDE7"/>
+</svg>

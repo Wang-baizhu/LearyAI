@@ -1,0 +1,7 @@
+# 当前文件职责：创建日志观测专用命名空间。
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: observability
+  labels:
+    app.kubernetes.io/name: observability

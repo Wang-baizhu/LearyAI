@@ -1,0 +1,22 @@
+# 当前文件职责：声明 test-external-kb 环境的 Argo CD Application。
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: learyai-test-external-kb
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: http://192.168.31.160:13001/XIAOBAI/LearyAI.git
+    # test GitOps 真源固定到 deploy/test，避免 CI 为推进测试环境而回写源码主线 main。
+    targetRevision: deploy/test
+    path: deploy/k8s/overlays/test-external-kb
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: learyai
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

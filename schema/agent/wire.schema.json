@@ -1,0 +1,1598 @@
+{
+  "$defs": {
+    "ApprovalRequestEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ApprovalRequest",
+          "default": "ApprovalRequest",
+          "title": "Type",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/SerializedApprovalRequest"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "ApprovalRequestEnvelope",
+      "type": "object"
+    },
+    "ApprovalResponse": {
+      "description": "Indicates that an approval request has been resolved.",
+      "properties": {
+        "request_id": {
+          "title": "Request Id",
+          "type": "string"
+        },
+        "response": {
+          "$ref": "#/$defs/Kind"
+        },
+        "feedback": {
+          "default": "",
+          "title": "Feedback",
+          "type": "string"
+        }
+      },
+      "required": [
+        "request_id",
+        "response"
+      ],
+      "title": "ApprovalResponse",
+      "type": "object"
+    },
+    "ApprovalResponseEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ApprovalResponse",
+          "default": "ApprovalResponse",
+          "title": "Type",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/ApprovalResponse"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "ApprovalResponseEnvelope",
+      "type": "object"
+    },
+    "BtwBegin": {
+      "description": "Indicates that a side question (/btw) has started processing.",
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "question": {
+          "title": "Question",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "question"
+      ],
+      "title": "BtwBegin",
+      "type": "object"
+    },
+    "BtwBeginEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "BtwBegin",
+          "default": "BtwBegin",
+          "title": "Type",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/BtwBegin"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "BtwBeginEnvelope",
+      "type": "object"
+    },
+    "BtwEnd": {
+      "description": "Indicates that a side question (/btw) has finished.",
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "response": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Response"
+        },
+        "error": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Error"
+        }
+      },
+      "required": [
+        "id"
+      ],
+      "title": "BtwEnd",
+      "type": "object"
+    },
+    "BtwEndEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "BtwEnd",
+          "default": "BtwEnd",
+          "title": "Type",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/BtwEnd"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "BtwEndEnvelope",
+      "type": "object"
+    },
+    "CompactionBegin": {
+      "description": "Indicates that a compaction just began.\nThis event must be sent during a step, which means, between `StepBegin` and the next\n`StepBegin` or `StepInterrupted`. And, there must be a `CompactionEnd` directly following\nthis event.",
+      "properties": {},
+      "title": "CompactionBegin",
+      "type": "object"
+    },
+    "CompactionBeginEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "CompactionBegin",
+          "default": "CompactionBegin",
+          "title": "Type",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/CompactionBegin"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "CompactionBeginEnvelope",
+      "type": "object"
+    },
+    "CompactionEnd": {
+      "description": "Indicates that a compaction just ended.\nThis event must be sent directly after a `CompactionBegin` event.",
+      "properties": {},
+      "title": "CompactionEnd",
+      "type": "object"
+    },
+    "CompactionEndEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "CompactionEnd",
+          "default": "CompactionEnd",
+          "title": "Type",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/CompactionEnd"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "CompactionEndEnvelope",
+      "type": "object"
+    },
+    "Event": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/TurnBegin"
+        },
+        {
+          "$ref": "#/$defs/SteerInput"
+        },
+        {
+          "$ref": "#/$defs/TurnEnd"
+        },
+        {
+          "$ref": "#/$defs/StepBegin"
+        },
+        {
+          "$ref": "#/$defs/StepInterrupted"
+        },
+        {
+          "$ref": "#/$defs/HookTriggered"
+        },
+        {
+          "$ref": "#/$defs/HookResolved"
+        },
+        {
+          "$ref": "#/$defs/CompactionBegin"
+        },
+        {
+          "$ref": "#/$defs/CompactionEnd"
+        },
+        {
+          "$ref": "#/$defs/MCPLoadingBegin"
+        },
+        {
+          "$ref": "#/$defs/MCPLoadingEnd"
+        },
+        {
+          "$ref": "#/$defs/StatusUpdate"
+        },
+        {
+          "$ref": "#/$defs/Notification"
+        },
+        {
+          "$ref": "#/$defs/ToolCall"
+        },
+        {
+          "$ref": "#/$defs/ToolCallPart"
+        },
+        {
+          "$ref": "#/$defs/ApprovalResponse"
+        },
+        {
+          "$ref": "#/$defs/SubagentEvent"
+        },
+        {
+          "$ref": "#/$defs/PlanDisplay"
+        },
+        {
+          "$ref": "#/$defs/BtwBegin"
+        },
+        {
+          "$ref": "#/$defs/BtwEnd"
+        }
+      ]
+    },
+    "FunctionBody": {
+      "description": "Tool call function body.",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "arguments": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Arguments"
+        }
+      },
+      "required": [
+        "name",
+        "arguments"
+      ],
+      "title": "FunctionBody",
+      "type": "object"
+    },
+    "HookRequest": {
+      "description": "A request for the wire client to handle a hook event.",
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "subscription_id": {
+          "default": "",
+          "title": "Subscription Id",
+          "type": "string"
+        },
+        "event": {
+          "title": "Event",
+          "type": "string"
+        },
+        "target": {
+          "default": "",
+          "title": "Target",
+          "type": "string"
+        },
+        "input_data": {
+          "additionalProperties": true,
+          "title": "Input Data",
+          "type": "object"
+        }
+      },
+      "required": [
+        "id",
+        "event"
+      ],
+      "title": "HookRequest",
+      "type": "object"
+    },
+    "HookRequestEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "HookRequest",
+          "default": "HookRequest",
+          "title": "Type",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/HookRequest"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "HookRequestEnvelope",
+      "type": "object"
+    },
+    "HookResolved": {
+      "description": "A batch of hooks has finished executing.",
+      "properties": {
+        "event": {
+          "title": "Event",
+          "type": "string"
+        },
+        "target": {
+          "default": "",
+          "title": "Target",
+          "type": "string"
+        },
+        "action": {
+          "default": "allow",
+          "enum": [
+            "allow",
+            "block"
+          ],
+          "title": "Action",
+          "type": "string"
+        },
+        "reason": {
+          "default": "",
+          "title": "Reason",
+          "type": "string"
+        },
+        "duration_ms": {
+          "default": 0,
+          "title": "Duration Ms",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "event"
+      ],
+      "title": "HookResolved",
+      "type": "object"
+    },
+    "HookResolvedEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "HookResolved",
+          "default": "HookResolved",
+          "title": "Type",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/HookResolved"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "HookResolvedEnvelope",
+      "type": "object"
+    },
+    "HookTriggered": {
+      "description": "A batch of hooks has been triggered and is now executing.",
+      "properties": {
+        "event": {
+          "title": "Event",
+          "type": "string"
+        },
+        "target": {
+          "default": "",
+          "title": "Target",
+          "type": "string"
+        },
+        "hook_count": {
+          "default": 1,
+          "title": "Hook Count",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "event"
+      ],
+      "title": "HookTriggered",
+      "type": "object"
+    },
+    "HookTriggeredEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "HookTriggered",
+          "default": "HookTriggered",
+          "title": "Type",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/HookTriggered"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "HookTriggeredEnvelope",
+      "type": "object"
+    },
+    "JsonType": {
+      "anyOf": [
+        {
+          "type": "integer"
+        },
+        {
+          "type": "number"
+        },
+        {
+          "type": "string"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "items": {
+            "$ref": "#/$defs/JsonType"
+          },
+          "type": "array"
+        },
+        {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonType"
+          },
+          "type": "object"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "Kind": {
+      "enum": [
+        "approve",
+        "approve_for_session",
+        "reject"
+      ],
+      "type": "string"
+    },
+    "MCPLoadingBegin": {
+      "description": "Indicates that MCP tool loading is in progress.",
+      "properties": {},
+      "title": "MCPLoadingBegin",
+      "type": "object"
+    },
+    "MCPLoadingBeginEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "MCPLoadingBegin",
+          "default": "MCPLoadingBegin",
+          "title": "Type",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/MCPLoadingBegin"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "MCPLoadingBeginEnvelope",
+      "type": "object"
+    },
+    "MCPLoadingEnd": {
+      "description": "Indicates that MCP tool loading has finished.",
+      "properties": {},
+      "title": "MCPLoadingEnd",
+      "type": "object"
+    },
+    "MCPLoadingEndEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "MCPLoadingEnd",
+          "default": "MCPLoadingEnd",
+          "title": "Type",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/MCPLoadingEnd"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "MCPLoadingEndEnvelope",
+      "type": "object"
+    },
+    "MCPServerSnapshot": {
+      "description": "A snapshot of one MCP server during startup.",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "pending",
+            "connecting",
+            "connected",
+            "failed",
+            "unauthorized"
+          ],
+          "title": "Status",
+          "type": "string"
+        },
+        "tools": {
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "title": "Tools",
+          "type": "array"
+        }
+      },
+      "required": [
+        "name",
+        "status"
+      ],
+      "title": "MCPServerSnapshot",
+      "type": "object"
+    },
+    "MCPStatusSnapshot": {
+      "description": "A snapshot of MCP startup progress.",
+      "properties": {
+        "loading": {
+          "title": "Loading",
+          "type": "boolean"
+        },
+        "connected": {
+          "title": "Connected",
+          "type": "integer"
+        },
+        "total": {
+          "title": "Total",
+          "type": "integer"
+        },
+        "tools": {
+          "title": "Tools",
+          "type": "integer"
+        },
+        "servers": {
+          "default": [],
+          "items": {
+            "$ref": "#/$defs/MCPServerSnapshot"
+          },
+          "title": "Servers",
+          "type": "array"
+        }
+      },
+      "required": [
+        "loading",
+        "connected",
+        "total",
+        "tools"
+      ],
+      "title": "MCPStatusSnapshot",
+      "type": "object"
+    },
+    "Notification": {
+      "description": "A generic system notification for UI and client consumption.",
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "category": {
+          "title": "Category",
+          "type": "string"
+        },
+        "type": {
+          "title": "Type",
+          "type": "string"
+        },
+        "source_kind": {
+          "title": "Source Kind",
+          "type": "string"
+        },
+        "source_id": {
+          "title": "Source Id",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "body": {
+          "title": "Body",
+          "type": "string"
+        },
+        "severity": {
+          "title": "Severity",
+          "type": "string"
+        },
+        "created_at": {
+          "title": "Created At",
+          "type": "number"
+        },
+        "payload": {
+          "additionalProperties": {
+            "$ref": "#/$defs/JsonType"
+          },
+          "title": "Payload",
+          "type": "object"
+        }
+      },
+      "required": [
+        "id",
+        "category",
+        "type",
+        "source_kind",
+        "source_id",
+        "title",
+        "body",
+        "severity",
+        "created_at"
+      ],
+      "title": "Notification",
+      "type": "object"
+    },
+    "NotificationEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "Notification",
+          "default": "Notification",
+          "title": "Type",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/Notification"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "NotificationEnvelope",
+      "type": "object"
+    },
+    "PlanDisplay": {
+      "description": "Displays a plan's content inline in the chat with special formatting.",
+      "properties": {
+        "content": {
+          "title": "Content",
+          "type": "string"
+        },
+        "file_path": {
+          "title": "File Path",
+          "type": "string"
+        }
+      },
+      "required": [
+        "content",
+        "file_path"
+      ],
+      "title": "PlanDisplay",
+      "type": "object"
+    },
+    "PlanDisplayEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "PlanDisplay",
+          "default": "PlanDisplay",
+          "title": "Type",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/PlanDisplay"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "PlanDisplayEnvelope",
+      "type": "object"
+    },
+    "QuestionItem": {
+      "description": "A single question to ask the user.",
+      "properties": {
+        "question": {
+          "title": "Question",
+          "type": "string"
+        },
+        "header": {
+          "default": "",
+          "title": "Header",
+          "type": "string"
+        },
+        "options": {
+          "items": {
+            "$ref": "#/$defs/QuestionOption"
+          },
+          "title": "Options",
+          "type": "array"
+        },
+        "multi_select": {
+          "default": false,
+          "title": "Multi Select",
+          "type": "boolean"
+        },
+        "body": {
+          "default": "",
+          "title": "Body",
+          "type": "string"
+        },
+        "other_label": {
+          "default": "",
+          "title": "Other Label",
+          "type": "string"
+        },
+        "other_description": {
+          "default": "",
+          "title": "Other Description",
+          "type": "string"
+        }
+      },
+      "required": [
+        "question",
+        "options"
+      ],
+      "title": "QuestionItem",
+      "type": "object"
+    },
+    "QuestionOption": {
+      "description": "A single option for a question.",
+      "properties": {
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "description": {
+          "default": "",
+          "title": "Description",
+          "type": "string"
+        }
+      },
+      "required": [
+        "label"
+      ],
+      "title": "QuestionOption",
+      "type": "object"
+    },
+    "QuestionRequest": {
+      "description": "A request to ask the user structured questions during execution.",
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "tool_call_id": {
+          "title": "Tool Call Id",
+          "type": "string"
+        },
+        "questions": {
+          "items": {
+            "$ref": "#/$defs/QuestionItem"
+          },
+          "title": "Questions",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "tool_call_id",
+        "questions"
+      ],
+      "title": "QuestionRequest",
+      "type": "object"
+    },
+    "QuestionRequestEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "QuestionRequest",
+          "default": "QuestionRequest",
+          "title": "Type",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/QuestionRequest"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "QuestionRequestEnvelope",
+      "type": "object"
+    },
+    "SerializedApprovalRequest": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "tool_call_id": {
+          "title": "Tool Call Id",
+          "type": "string"
+        },
+        "sender": {
+          "title": "Sender",
+          "type": "string"
+        },
+        "action": {
+          "title": "Action",
+          "type": "string"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "source_kind": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Kind"
+        },
+        "source_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Id"
+        },
+        "agent_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Agent Id"
+        },
+        "subagent_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Subagent Type"
+        },
+        "source_description": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Description"
+        },
+        "display": {
+          "default": [],
+          "items": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "title": "Display",
+          "type": "array"
+        }
+      },
+      "required": [
+        "id",
+        "tool_call_id",
+        "sender",
+        "action",
+        "description"
+      ],
+      "title": "SerializedApprovalRequest",
+      "type": "object"
+    },
+    "SerializedToolResult": {
+      "additionalProperties": false,
+      "properties": {
+        "tool_call_id": {
+          "title": "Tool Call Id",
+          "type": "string"
+        },
+        "return_value": {
+          "$ref": "#/$defs/SerializedToolReturnValue"
+        }
+      },
+      "required": [
+        "tool_call_id",
+        "return_value"
+      ],
+      "title": "SerializedToolResult",
+      "type": "object"
+    },
+    "SerializedToolReturnValue": {
+      "additionalProperties": false,
+      "properties": {
+        "is_error": {
+          "title": "Is Error",
+          "type": "boolean"
+        },
+        "output": {
+          "title": "Output"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        },
+        "display": {
+          "items": {
+            "additionalProperties": true,
+            "type": "object"
+          },
+          "title": "Display",
+          "type": "array"
+        },
+        "extras": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Extras"
+        }
+      },
+      "required": [
+        "is_error",
+        "output",
+        "message",
+        "display"
+      ],
+      "title": "SerializedToolReturnValue",
+      "type": "object"
+    },
+    "StatusUpdate": {
+      "description": "An update on the current status of the soul.\nNone fields indicate no change from the previous status.",
+      "properties": {
+        "context_usage": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Context Usage"
+        },
+        "context_tokens": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Context Tokens"
+        },
+        "max_context_tokens": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Max Context Tokens"
+        },
+        "token_usage": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/TokenUsage"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "message_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Message Id"
+        },
+        "plan_mode": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Plan Mode"
+        },
+        "mcp_status": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/MCPStatusSnapshot"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "title": "StatusUpdate",
+      "type": "object"
+    },
+    "StatusUpdateEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "StatusUpdate",
+          "default": "StatusUpdate",
+          "title": "Type",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/StatusUpdate"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "StatusUpdateEnvelope",
+      "type": "object"
+    },
+    "SteerInput": {
+      "description": "Indicates that the user appended follow-up input to the current running turn.",
+      "properties": {
+        "user_input": {
+          "title": "User Input",
+          "type": "string"
+        }
+      },
+      "required": [
+        "user_input"
+      ],
+      "title": "SteerInput",
+      "type": "object"
+    },
+    "SteerInputEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "SteerInput",
+          "default": "SteerInput",
+          "title": "Type",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/SteerInput"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "SteerInputEnvelope",
+      "type": "object"
+    },
+    "StepBegin": {
+      "description": "Indicates the beginning of a new agent step.\nThis event must be sent before any other event in the step.",
+      "properties": {
+        "n": {
+          "title": "N",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "n"
+      ],
+      "title": "StepBegin",
+      "type": "object"
+    },
+    "StepBeginEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "StepBegin",
+          "default": "StepBegin",
+          "title": "Type",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/StepBegin"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "StepBeginEnvelope",
+      "type": "object"
+    },
+    "StepInterrupted": {
+      "description": "Indicates the current step was interrupted, either by user intervention or an error.",
+      "properties": {},
+      "title": "StepInterrupted",
+      "type": "object"
+    },
+    "StepInterruptedEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "StepInterrupted",
+          "default": "StepInterrupted",
+          "title": "Type",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/StepInterrupted"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "StepInterruptedEnvelope",
+      "type": "object"
+    },
+    "SubagentEvent": {
+      "description": "An event from a subagent.",
+      "properties": {
+        "parent_tool_call_id": {
+          "title": "Parent Tool Call Id",
+          "type": "string"
+        },
+        "agent_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Agent Id"
+        },
+        "subagent_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Subagent Type"
+        },
+        "event": {
+          "$ref": "#/$defs/Event"
+        }
+      },
+      "required": [
+        "parent_tool_call_id",
+        "event"
+      ],
+      "title": "SubagentEvent",
+      "type": "object"
+    },
+    "SubagentEventEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "SubagentEvent",
+          "default": "SubagentEvent",
+          "title": "Type",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/SubagentEvent"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "SubagentEventEnvelope",
+      "type": "object"
+    },
+    "TokenUsage": {
+      "description": "Token usage statistics.",
+      "properties": {
+        "input_other": {
+          "title": "Input Other",
+          "type": "integer"
+        },
+        "output": {
+          "title": "Output",
+          "type": "integer"
+        },
+        "input_cache_read": {
+          "default": 0,
+          "title": "Input Cache Read",
+          "type": "integer"
+        },
+        "input_cache_creation": {
+          "default": 0,
+          "title": "Input Cache Creation",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "input_other",
+        "output"
+      ],
+      "title": "TokenUsage",
+      "type": "object"
+    },
+    "ToolCall": {
+      "description": "A tool call requested by the assistant.\n\n>>> ToolCall(\n...     id=\"123\",\n...     function=ToolCall.FunctionBody(name=\"function\", arguments=\"{}\"),\n... ).model_dump(exclude_none=True)\n{'type': 'function', 'id': '123', 'function': {'name': 'function', 'arguments': '{}'}}",
+      "properties": {
+        "type": {
+          "const": "function",
+          "default": "function",
+          "title": "Type",
+          "type": "string"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "function": {
+          "$ref": "#/$defs/FunctionBody"
+        },
+        "extras": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "$ref": "#/$defs/JsonType"
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Extras"
+        }
+      },
+      "required": [
+        "id",
+        "function"
+      ],
+      "title": "ToolCall",
+      "type": "object"
+    },
+    "ToolCallEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ToolCall",
+          "default": "ToolCall",
+          "title": "Type",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/ToolCall"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "ToolCallEnvelope",
+      "type": "object"
+    },
+    "ToolCallPart": {
+      "description": "A part of the tool call.",
+      "properties": {
+        "arguments_part": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Arguments Part"
+        }
+      },
+      "title": "ToolCallPart",
+      "type": "object"
+    },
+    "ToolCallPartEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ToolCallPart",
+          "default": "ToolCallPart",
+          "title": "Type",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/ToolCallPart"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "ToolCallPartEnvelope",
+      "type": "object"
+    },
+    "ToolCallRequest": {
+      "description": "A tool call request routed to the Wire client for execution.",
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "arguments": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "title": "Arguments"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "arguments"
+      ],
+      "title": "ToolCallRequest",
+      "type": "object"
+    },
+    "ToolCallRequestEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ToolCallRequest",
+          "default": "ToolCallRequest",
+          "title": "Type",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/ToolCallRequest"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "ToolCallRequestEnvelope",
+      "type": "object"
+    },
+    "ToolResultEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "ToolResult",
+          "default": "ToolResult",
+          "title": "Type",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/SerializedToolResult"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "ToolResultEnvelope",
+      "type": "object"
+    },
+    "TurnBegin": {
+      "description": "Indicates the beginning of a new agent turn.\nThis event must be sent before any other event in the turn.",
+      "properties": {
+        "user_input": {
+          "title": "User Input",
+          "type": "string"
+        }
+      },
+      "required": [
+        "user_input"
+      ],
+      "title": "TurnBegin",
+      "type": "object"
+    },
+    "TurnBeginEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "TurnBegin",
+          "default": "TurnBegin",
+          "title": "Type",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/TurnBegin"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "TurnBeginEnvelope",
+      "type": "object"
+    },
+    "TurnEnd": {
+      "description": "Indicates the end of the current agent turn.\nThis event must be sent after all other events in the turn.",
+      "properties": {},
+      "title": "TurnEnd",
+      "type": "object"
+    },
+    "TurnEndEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "const": "TurnEnd",
+          "default": "TurnEnd",
+          "title": "Type",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/TurnEnd"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "TurnEndEnvelope",
+      "type": "object"
+    }
+  },
+  "anyOf": [
+    {
+      "$ref": "#/$defs/TurnBeginEnvelope"
+    },
+    {
+      "$ref": "#/$defs/SteerInputEnvelope"
+    },
+    {
+      "$ref": "#/$defs/TurnEndEnvelope"
+    },
+    {
+      "$ref": "#/$defs/StepBeginEnvelope"
+    },
+    {
+      "$ref": "#/$defs/StepInterruptedEnvelope"
+    },
+    {
+      "$ref": "#/$defs/HookTriggeredEnvelope"
+    },
+    {
+      "$ref": "#/$defs/HookResolvedEnvelope"
+    },
+    {
+      "$ref": "#/$defs/CompactionBeginEnvelope"
+    },
+    {
+      "$ref": "#/$defs/CompactionEndEnvelope"
+    },
+    {
+      "$ref": "#/$defs/MCPLoadingBeginEnvelope"
+    },
+    {
+      "$ref": "#/$defs/MCPLoadingEndEnvelope"
+    },
+    {
+      "$ref": "#/$defs/StatusUpdateEnvelope"
+    },
+    {
+      "$ref": "#/$defs/NotificationEnvelope"
+    },
+    {
+      "$ref": "#/$defs/ToolCallEnvelope"
+    },
+    {
+      "$ref": "#/$defs/ToolCallPartEnvelope"
+    },
+    {
+      "$ref": "#/$defs/ToolResultEnvelope"
+    },
+    {
+      "$ref": "#/$defs/ApprovalResponseEnvelope"
+    },
+    {
+      "$ref": "#/$defs/SubagentEventEnvelope"
+    },
+    {
+      "$ref": "#/$defs/PlanDisplayEnvelope"
+    },
+    {
+      "$ref": "#/$defs/BtwBeginEnvelope"
+    },
+    {
+      "$ref": "#/$defs/BtwEndEnvelope"
+    },
+    {
+      "$ref": "#/$defs/ApprovalRequestEnvelope"
+    },
+    {
+      "$ref": "#/$defs/ToolCallRequestEnvelope"
+    },
+    {
+      "$ref": "#/$defs/QuestionRequestEnvelope"
+    },
+    {
+      "$ref": "#/$defs/HookRequestEnvelope"
+    }
+  ]
+}

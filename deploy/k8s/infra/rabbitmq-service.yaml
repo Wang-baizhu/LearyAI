@@ -1,0 +1,18 @@
+# 当前文件职责：为集群内 RabbitMQ 提供 AMQP 与管理端口访问入口。
+apiVersion: v1
+kind: Service
+metadata:
+  name: leary-rabbitmq
+  labels:
+    app: leary-rabbitmq
+spec:
+  clusterIP: None
+  selector:
+    app: leary-rabbitmq
+  ports:
+    - name: amqp
+      port: 5672
+      targetPort: amqp
+    - name: management
+      port: 15672
+      targetPort: management

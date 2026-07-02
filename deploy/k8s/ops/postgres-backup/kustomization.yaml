@@ -1,0 +1,10 @@
+# 当前文件职责：聚合 PostgreSQL 逻辑备份与恢复模板资源。
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: learyai
+
+resources:
+  - postgres-backup-secret.template.yaml
+  - postgres-backup-cronjob.yaml
+  - postgres-restore-job.template.yaml

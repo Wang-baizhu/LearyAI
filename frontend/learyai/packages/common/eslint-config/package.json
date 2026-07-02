@@ -1,0 +1,17 @@
+{
+  "name": "@leary/eslint-config",
+  "private": true,
+  "version": "0.0.0",
+  "types": "./index.ts",
+  "exports": {
+    ".": {
+      "types": "./index.ts",
+      "require": "./index.js",
+      "default": "./index.js"
+    }
+  },
+  "dependencies": {
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}

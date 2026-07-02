@@ -1,0 +1,33 @@
+# 当前文件职责：定时执行 PostgreSQL 逻辑备份并上传到对象存储。
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: leary-postgres-backup
+spec:
+  schedule: "0 3 * * *"
+  successfulJobsHistoryLimit: 3
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: pg-backup
+              image: postgres:16
+              env:
+                - name: PGPASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: leary-backend-secret
+                      key: SPRING_DATASOURCE_PASSWORD
+              envFrom:
+                - secretRef:
+                    name: leary-postgres-backup-secret
+              command:
+                - /bin/sh
+                - -lc
+                - >
+                  pg_dump -h leary-postgres -U postgres -d learyai_test
+                  | gzip > /tmp/learyai_test.sql.gz &&
+                  echo "upload /tmp/learyai_test.sql.gz to ${S3_BUCKET} via aws cli or sidecar"

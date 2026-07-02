@@ -1,0 +1,26 @@
+# Agent说明（后端根目录）
+- 范围：Spring Boot 后端（Java 17），DDD 分层模块位于 `module/*`，辅助包有 `config` 与 `shared`，入口 `LearyAiApplication`。
+- 结构约定：每个模块保持四层：`interfaces`(REST 控制器+DTO)、`application`(服务/策略)、`domain`(实体/仓储接口)、`infrastructure`(适配器/持久化/安全/MQ)；跨模块依赖通过应用服务或 shared 抽象。
+- 共享内容：`config`（CORS/Jackson/Auth/Redis 等）、`shared`（ApiResponse、CurrentUserContext、BizException、通用枚举、cache 公共能力 `RedisCacheSupport`）、全局过滤器（如 AuthFilter）。
+- AuthN/AuthZ 边界：
+  - `module/auth` 表示认证（AuthN）：会话、登录态、内网白名单与身份注入（`CurrentUserContext`）。
+  - `module/authz` 表示授权（AuthZ）：`userId + projectId + action` 的权限判定与角色校验。
+  - `module/usage` 表示用量能力：统一记录与查询、幂等语义、缓存回源，并兼容旧配额门面。
+  - `module/usageservice` 表示 usage 对外 gRPC 服务入口：服务鉴权与契约映射，内部调用 usage SDK。
+  - `module/access` 表示组合门面：统一编排 `Authz -> Usage`。
+- 模块与对外暴露：
+  - `module/admin`：管理后台第一批只读查询；REST `/api/admin/**`（平台管理员专用），查询读取需通过 admin 端口与 adapter，避免 application 直接依赖其他模块 infrastructure。
+  - `module/auth`：账号、会话 Cookie 与 Token 发放、短信验证码；REST `/api/auth/**`；`AuthFilter` 为受保护路由注入 `CurrentUserContext(userId,userMode)`；`/api/auth/me` 查询提供 Redis Cache-Aside（`cache.auth.*`）。
+  - `module/authz`：项目级授权 SDK（无对外 HTTP），提供 `requireUserId/requireProjectId/requireRole/isMember/authorize`。
+  - `module/usage`：用量 SDK（无对外 HTTP），提供 `UsageRecorder/UsageQuery` 与兼容的 `UsageGuard/UsageMetrics`。
+  - `module/usageservice`：用量 gRPC 服务（默认端口配置 `usage.service.grpc.port`），提供 `UsageService`（reserve/commit/release/query）与 `UsageControlService`（current-policy/turn-lease/single-call）。
+  - `module/access`：访问组合 SDK（当前无对外 HTTP），提供 `AccessGuard` 统一准入入口。
+  - `module/project`：项目生命周期、成员、邀请；REST `/api/projects/**`。
+  - `module/kb`：知识库元数据 CRUD 与访问记录；REST `/api/knowledge-bases/**`。
+  - `module/kb`：知识库元数据 CRUD 与访问记录；REST `/api/knowledge-bases/**`，并对 list/recent/detail 查询提供 Redis Cache-Aside（`cache.kb.*`）。
+  - `module/kbdoc`：知识库文档上传/处理/绑定；REST `/api/kb/**`，并对 list/detail/text-chunks/recent 查询提供 Redis Cache-Aside（`cache.kbdoc.*`）。
+  - `module/resourcecenter`：资源中心跨域轻量聚合读模型；REST `/api/resource-center/**`，当前用于 flow-canvas 懒加载文档选项全集。
+  - `module/task`：通用任务模型与状态推送；SSE `/sse/tasks`。
+  - `module/visit`：通用用户资源访问记录服务（无 HTTP 层）。
+- 约定：基础设施类型不向上泄露；DTO 仅在 `interfaces/dto`；持久化 PO/JPA 在 `infrastructure/persistence`；仓储实现在 `infrastructure/repository`；受保护接口默认由 `AuthFilter` 守护，只有白名单例外。
+- 依赖约定：业务模块（`kb/kbdoc/template/task`）的项目权限校验应优先依赖 `module/authz`（或 `module/access`），不直接依赖 `module/project.application.PermissionSupport`。

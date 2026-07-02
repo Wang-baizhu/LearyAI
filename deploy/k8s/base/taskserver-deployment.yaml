@@ -1,0 +1,68 @@
+# 当前文件职责：部署 Python tasks_server（MQ 任务消费与执行服务）。
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: leary-task
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: leary-task
+  template:
+    metadata:
+      labels:
+        app: leary-task
+    spec:
+      containers:
+        - name: leary-task
+          image: leary-task:latest
+          imagePullPolicy: IfNotPresent
+          envFrom:
+            - configMapRef:
+                name: leary-agent-config
+            - secretRef:
+                name: leary-agent-secret
+            - configMapRef:
+                name: leary-task-config
+            - secretRef:
+                name: leary-task-secret
+          ports:
+            - name: metrics
+              containerPort: 8023
+          volumeMounts:
+            - name: task-logs
+              mountPath: /app/logs
+            - name: kimi-logs
+              mountPath: /root/.kimi/logs
+            - name: task-workdir
+              mountPath: /app/workdir
+          startupProbe:
+            httpGet:
+              path: /healthz/startup
+              port: metrics
+            failureThreshold: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /healthz/ready
+              port: metrics
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /healthz/live
+              port: metrics
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi
+      volumes:
+        - name: task-logs
+          emptyDir: {}
+        - name: kimi-logs
+          emptyDir: {}
+        - name: task-workdir
+          emptyDir: {}

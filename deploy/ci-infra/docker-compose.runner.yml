@@ -1,0 +1,20 @@
+# 当前文件职责：通过 Docker Compose 在仓库内启动 act_runner，并让 ubuntu-latest 等标签映射到自定义 runner job 镜像。
+services:
+  act-runner:
+    image: docker.io/gitea/act_runner:latest
+    container_name: leary-act-runner
+    restart: unless-stopped
+    env_file:
+      - .env.runner
+    environment:
+      CONFIG_FILE: /config.yaml
+      GITEA_INSTANCE_URL: ${GITEA_INSTANCE_URL}
+      GITEA_RUNNER_REGISTRATION_TOKEN: ${GITEA_RUNNER_REGISTRATION_TOKEN}
+      GITEA_RUNNER_NAME: ${GITEA_RUNNER_NAME}
+      GITEA_RUNNER_LABELS: ${GITEA_RUNNER_LABELS}
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./data/act_runner/config.yaml:/config.yaml
+      - ./data/act_runner:/data
+      - /var/run/docker.sock:/var/run/docker.sock

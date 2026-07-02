@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html lang="zh" class="light">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+    <title>Leary AI</title>
+    <link rel="icon" type="image/svg+xml" href="/icon-animate.svg"/>
+    <link rel="alternate icon" type="image/svg+xml" href="/favicon.svg"/>
+    <script>
+        (function () {
+            var storageKey = 'learyai.theme';
+            var storedTheme = window.localStorage.getItem(storageKey);
+            var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+            var shouldUseDark = storedTheme === 'dark' || (storedTheme !== 'light' && prefersDark);
+            if (shouldUseDark) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        })();
+    </script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#14b8a6", // Teal
+                        accent: "#00d1c1",
+                        "brand-teal": "#0d9488",
+                        "background-light": "#f8fafc",
+                        "background-dark": "#0f172a",
+                        "panel-light": "#ffffff",
+                        "panel-dark": "#1e293b",
+                    },
+                    fontFamily: {
+                        sans: ["Inter", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.75rem",
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .ai-glow { box-shadow: 0 0 20px rgba(20, 184, 166, 0.15); }
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    </style>
+    <script src="/runtime-config.js"></script>
+<script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/"
+  }
+}
+</script>
+</head>
+<body class="bg-background-light dark:bg-background-dark transition-colors duration-300">
+    <div id="root"></div>
+<script type="module" src="src/main.tsx"></script>
+</body>
+</html>

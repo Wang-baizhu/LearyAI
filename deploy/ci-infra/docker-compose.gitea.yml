@@ -1,0 +1,20 @@
+# 当前文件职责：通过 Docker Compose 在仓库内启动 Gitea，并将持久化数据写入 deploy/ci-infra/data。
+services:
+  gitea:
+    image: docker.gitea.com/gitea:1.24.7
+    container_name: leary-gitea
+    user: "0:0"
+    restart: unless-stopped
+    environment:
+      GITEA__database__DB_TYPE: sqlite3
+      GITEA__git__HOME_PATH: /tmp/gitea-home
+      GITEA__server__SSH_DOMAIN: localhost
+      GITEA__server__DOMAIN: localhost
+      GITEA__server__ROOT_URL: http://localhost:13001/
+      GITEA__server__HTTP_PORT: 3000
+      GITEA__server__SSH_PORT: 2222
+    ports:
+      - "13001:3000"
+      - "2222:2222"
+    volumes:
+      - ./data/gitea:/data

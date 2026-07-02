@@ -1,0 +1,12 @@
+# 当前文件职责：为 dev-external-kb 覆盖插件预览网关镜像标签与拉取策略。
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: leary-plugin-gateway
+spec:
+  template:
+    spec:
+      containers:
+        - name: leary-plugin-gateway
+          image: leary-plugin-gateway:dev
+          imagePullPolicy: IfNotPresent

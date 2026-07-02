@@ -1,0 +1,10 @@
+# 当前文件职责：通过 Docker Compose 在仓库内启动独立 Docker Registry，并将镜像数据写入 deploy/ci-infra/data/registry。
+services:
+  registry:
+    image: registry:2
+    container_name: leary-registry
+    restart: unless-stopped
+    ports:
+      - "15001:5000"
+    volumes:
+      - ./data/registry:/var/lib/registry

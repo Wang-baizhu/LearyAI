@@ -1,0 +1,22 @@
+{
+  "name": "documentation",
+  "version": "1.0.0",
+  "displayName": "说明文档书",
+  "entryHtml": "index.html",
+  "assetBaseDir": "assets",
+  "capabilities": {
+    "render": true,
+    "theme": true,
+    "storage": true,
+    "textEdit": true,
+    "aiAction": true,
+    "citationJump": true
+  },
+  "prompt_json_schema": {
+    "toolPrompt": "生成正常的md格式文本即可，“#”为标题。"
+  },
+  "sdkPackage": "@leary/template-plugin-sdk-react",
+  "sdkVersion": "0.0.0",
+  "toolPromptExample": "# Leary Template Demo\n\n这里是默认传入给 render.content 的模板正文示例。\n\n- 选择目录后，dev playground 会自动读取这段内容\n- 模板预览首次加载时会模拟宿主传入相同 content\n- 你仍然可以在 Content 面板里继续手动修改"
+}
+

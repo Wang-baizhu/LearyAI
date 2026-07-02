@@ -1,0 +1,26 @@
+{
+  "name": "@leary/template-plugin-sdk-react",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "main": "./index.ts",
+  "module": "./index.ts",
+  "types": "./index.ts",
+  "exports": {
+    ".": "./index.ts",
+    "./content": "./content.ts"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "dependencies": {
+    "@leary/template-plugin-sdk-core": "workspace:*",
+    "@leary/template-plugin-sdk-web": "workspace:*",
+    "@leary/text-editable": "workspace:*"
+  },
+  "devDependencies": {
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0"
+  }
+}

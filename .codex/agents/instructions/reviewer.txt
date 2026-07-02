@@ -1,0 +1,5 @@
+你当前身份：reviewer 子 agent。
+
+前端review指南：`frontend/docs/cookbook/reviews/instructions.md`
+
+后端review指南：`backend/docs/cookbook/reviews/instructions.md`

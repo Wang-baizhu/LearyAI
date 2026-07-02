@@ -1,0 +1,28 @@
+# 当前文件职责：test + external-kb 组合编排，供首个 GitOps 自动同步环境使用。
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../external-kb
+  - ../../components/env/test
+
+images:
+  - name: leary-plugin-gateway
+    newName: 192.168.31.160:15001/leary-plugin-gateway
+    newTag: test-initial
+  - name: leary-backend
+    newName: 192.168.31.160:15001/leary-backend
+    newTag: test-initial
+  - name: leary-agent
+    newName: 192.168.31.160:15001/leary-agent
+    newTag: test-initial
+  - name: leary-task
+    newName: 192.168.31.160:15001/leary-task
+    newTag: test-initial
+
+patches:
+  - path: patch-agent-configmap.yaml
+  - path: patch-taskserver-configmap.yaml
+  - path: patch-backend-deployment.yaml
+  - path: patch-agent-deployment.yaml
+  - path: patch-task-deployment.yaml

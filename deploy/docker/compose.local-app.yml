@@ -1,0 +1,10 @@
+# 当前文件职责：覆盖本地联调场景下的 Docker 编排，仅让 plugin-gateway 指向宿主机本地应用。
+services:
+  plugin-gateway:
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      LEARY_BACKEND_INTERNAL_BASE_URL: http://host.docker.internal:8080/api/templates/internal/plugins
+      LEARY_FRONTEND_DEV_BASE_URL: http://host.docker.internal:8000
+      LEARY_PLUGIN_GATEWAY_RESOLVER: 127.0.0.11
+      LEARY_PLUGIN_GATEWAY_TEMPLATE: nginx.local-app.conf.template

@@ -1,0 +1,25 @@
+# 当前文件职责：prod + internal-kb 组合编排（使用集群内 KB，沿用 base 镜像标签策略）。
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../internal-kb
+  - ../../components/env/prod
+
+images:
+  - name: leary-plugin-gateway
+    newName: 192.168.31.160:15001/leary-plugin-gateway
+    newTag: prod-initial
+  - name: leary-backend
+    newName: 192.168.31.160:15001/leary-backend
+    newTag: prod-initial
+  - name: leary-agent
+    newName: 192.168.31.160:15001/leary-agent
+    newTag: prod-initial
+  - name: leary-task
+    newName: 192.168.31.160:15001/leary-task
+    newTag: prod-initial
+
+patches:
+  - path: patch-agent-configmap.yaml
+  - path: patch-taskserver-configmap.yaml

@@ -1,0 +1,2 @@
+-- 当前文件职责：在 PostgreSQL 首次初始化时启用 pgvector 扩展。
+CREATE EXTENSION IF NOT EXISTS vector;

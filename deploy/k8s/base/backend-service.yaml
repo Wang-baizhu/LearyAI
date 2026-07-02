@@ -1,0 +1,17 @@
+# 当前文件职责：为 Java backend 暴露集群内 HTTP 与 usage gRPC 访问入口。
+apiVersion: v1
+kind: Service
+metadata:
+  name: leary-backend
+  labels:
+    app: leary-backend
+spec:
+  selector:
+    app: leary-backend
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
+    - name: usage-grpc
+      port: 9091
+      targetPort: usage-grpc

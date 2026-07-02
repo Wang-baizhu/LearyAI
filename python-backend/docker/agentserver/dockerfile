@@ -1,0 +1,46 @@
+# 该文件职责：构建 agent_ws 容器，安装依赖并以 uvicorn 启动 websocket 服务。
+# docker build -f docker/agentserver/dockerfile -t leary-agent:latest .
+# docker run --cpus=0.5 --memory=1g --env-file .env.agent -p 8081:8081 --name leary-agent leary-agent:latest
+# docker run --cpus=0.5 --memory=1g --env-file .env.agent.test -p 8081:8081 --name agentserver \
+#   -v "${PWD}/logs/docker/mock.txt:/app/mock.txt" \
+#   -v "${PWD}/logs/docker/agent_ws.log:/app/logs/agent_ws.log" \
+#   -v "${PWD}/logs/docker/kimi_logs:/root/.kimi/logs" \
+#   -v "${PWD}/workdir:/app/workdir" \
+#   -v "${PWD}/agent_ws:/app/agent_ws" \
+#   -v "${PWD}/packages:/app/packages" \
+#   leary-agent:latest uvicorn agent_ws.server:app --host 0.0.0.0 --port 8081 --ws-ping-interval 3600000
+FROM python:3.12-slim-bullseye
+
+ENV PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=off \
+    PIP_DISABLE_PIP_VERSION_CHECK=1 \
+    KIMI_AGENT_WS_HOST=0.0.0.0 \
+    KIMI_AGENT_WS_PORT=8081
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends build-essential libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+RUN mkdir -p /app/logs /root/.kimi/logs
+
+COPY docker/agentserver/requirements.txt docker/agentserver/requirements.txt
+COPY agent_ws/ agent_ws/
+COPY agent_runtime/ agent_runtime/
+COPY packages/kaos/ packages/kaos/
+COPY packages/kimi-cli/ packages/kimi-cli/
+COPY packages/leary-logging/ packages/leary-logging/
+COPY packages/kosong/ packages/kosong/
+COPY packages/usage-control/ packages/usage-control/
+
+RUN pip install --upgrade pip setuptools wheel \
+    && pip install -r docker/agentserver/requirements.txt
+
+COPY tests/mock.txt /app/mock.txt
+
+VOLUME ["/app/logs", "/root/.kimi/logs"]
+
+EXPOSE 8081
+
+CMD ["uvicorn", "agent_ws.server:app", "--host", "0.0.0.0", "--port", "8081"]

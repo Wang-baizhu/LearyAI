@@ -1,0 +1,10 @@
+# 当前文件职责：定义 reviewer 审核子 agent 的职责和默认行为。
+
+model = "gpt-5.4"
+model_provider = "openai"
+approval_policy = "on-request"
+sandbox_mode = "read-only"
+model_reasoning_effort = "high"
+model_verbosity = "medium"
+
+model_instructions_file = "./instructions/reviewer.txt"

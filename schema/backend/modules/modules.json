@@ -1,0 +1,99 @@
+{
+  "modules": [
+    "admin",
+    "auth",
+    "kb",
+    "knowledge-bases",
+    "projects",
+    "resource-center",
+    "skills",
+    "tasks",
+    "templates",
+    "usage",
+    "visits"
+  ],
+  "pathsByModule": {
+    "admin": [
+      "/api/admin/invites",
+      "/api/admin/invites/{inviteId}",
+      "/api/admin/register-invites",
+      "/api/admin/register-invites/{inviteId}",
+      "/api/admin/register-invites/{inviteId}:inactive",
+      "/api/admin/task-dlq-incidents",
+      "/api/admin/task-dlq-incidents/{incidentId}",
+      "/api/admin/task-dlq-incidents/{incidentId}/status",
+      "/api/admin/usage/current-cycle",
+      "/api/admin/usage/event/list",
+      "/api/admin/usage/summary",
+      "/api/admin/users/recent-logins",
+      "/api/admin/users/summary",
+      "/api/admin/users/{userId}",
+      "/api/admin/users/{userId}/subscription-cycles",
+      "/api/admin/users/{userId}/subscription-cycles/{metric}"
+    ],
+    "auth": [
+      "/api/auth/login",
+      "/api/auth/logout",
+      "/api/auth/me",
+      "/api/auth/register",
+      "/api/auth/register/invite",
+      "/api/auth/sms-code"
+    ],
+    "kb": [
+      "/api/kb/docs",
+      "/api/kb/docs/bind",
+      "/api/kb/docs/import/text",
+      "/api/kb/docs/import/url",
+      "/api/kb/docs/options",
+      "/api/kb/docs/preview/credentials",
+      "/api/kb/docs/recent",
+      "/api/kb/docs/upload/confirm",
+      "/api/kb/docs/upload/prepare",
+      "/api/kb/docs/{docId}",
+      "/api/kb/docs/{docId}/text-chunks",
+      "/api/kb/recent"
+    ],
+    "knowledge-bases": [
+      "/api/knowledge-bases",
+      "/api/knowledge-bases/recent",
+      "/api/knowledge-bases/{kbId}",
+      "/api/knowledge-bases/{kbId}/canvas",
+      "/api/knowledge-bases/{kbId}/visit"
+    ],
+    "projects": [
+      "/api/projects",
+      "/api/projects/invites/accept",
+      "/api/projects/{projectId}",
+      "/api/projects/{projectId}/invites",
+      "/api/projects/{projectId}/invites/{inviteId}",
+      "/api/projects/{projectId}/leave",
+      "/api/projects/{projectId}/members",
+      "/api/projects/{projectId}/members/{userId}",
+      "/api/projects/{projectId}/members/{userId}/role",
+      "/api/projects/{projectId}/transfer"
+    ],
+    "resource-center": [
+      "/api/resource-center/options"
+    ],
+    "skills": [
+      "/api/skills/kb/token",
+      "/api/skills/search",
+      "/api/skills/tasks"
+    ],
+    "tasks": [
+      "/api/tasks",
+      "/api/tasks/{taskId}",
+      "/api/tasks/{taskId}/retry",
+      "/api/tasks/{taskRecordId}/status"
+    ],
+    "templates": [
+      "/api/templates/plugin-manifest"
+    ],
+    "usage": [
+      "/api/usage/current-cycle"
+    ],
+    "visits": [
+      "/api/visits/recent"
+    ]
+  }
+}

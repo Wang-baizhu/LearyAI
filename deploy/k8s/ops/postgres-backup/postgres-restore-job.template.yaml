@@ -1,0 +1,24 @@
+# 当前文件职责：提供 PostgreSQL 恢复演练 Job 模板。
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: leary-postgres-restore
+spec:
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: pg-restore
+          image: postgres:16
+          env:
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: leary-backend-secret
+                  key: SPRING_DATASOURCE_PASSWORD
+          command:
+            - /bin/sh
+            - -lc
+            - >
+              gunzip -c /backup/learyai_test.sql.gz |
+              psql -h leary-postgres -U postgres -d learyai_test

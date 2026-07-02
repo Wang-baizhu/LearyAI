@@ -1,0 +1,54 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        
+      {
+        "name": "kimi (acp)",
+        "type": "python",
+        "request": "launch",
+        "args": "--acp",
+        "module": "kimi_cli.cli",
+        "justMyCode": false,
+        "console": "integratedTerminal",
+        "env": {
+          "PYTHONBREAKPOINT": "pdb.set_trace"
+        }
+      },
+      {
+        "name": "kimi (python debugger)",
+        "type": "python",
+        "request": "launch",
+        "module": "kimi_cli.cli",
+        "console": "integratedTerminal",
+        "justMyCode": false
+      },
+      {
+        "name": "kimi acp (ws)",
+        "type": "python",
+        "request": "launch",
+        "module": "kimi_cli.cli",
+        "args": ["acp", "--transport", "ws", "--host", "127.0.0.1", "--port", "8010"],
+        "console": "integratedTerminal",
+        "justMyCode": false
+      },
+      {
+        "name": "agent_ws (env.agent)",
+        "type": "python",
+        "request": "launch",
+        "module": "agent_ws.server",
+        "cwd": "${workspaceFolder}",
+        "envFile": "${workspaceFolder}/.env.agent.local",
+        "console": "integratedTerminal",
+        "justMyCode": false
+      },
+      {
+        "name": "Attach kimi",
+        "type": "python",
+        "request": "attach",
+        "connect": { "host": "localhost", "port": 5678 },
+        "justMyCode": false
+      }
+      
+    ]
+  }
+  

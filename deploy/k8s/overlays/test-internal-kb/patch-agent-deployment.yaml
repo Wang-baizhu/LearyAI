@@ -1,0 +1,11 @@
+# 当前文件职责：为 test-internal-kb 覆盖 agent 镜像标签与拉取策略。
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: leary-agent
+spec:
+  template:
+    spec:
+      containers:
+        - name: leary-agent
+          imagePullPolicy: IfNotPresent

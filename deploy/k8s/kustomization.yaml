@@ -1,0 +1,25 @@
+# 当前文件职责：test + external-kb GitOps 根清单，供 Argo CD 直接从 deploy/k8s 加载。
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - base
+  - components/env/test
+
+images:
+  - name: leary-plugin-gateway
+    newName: 192.168.31.160:15001/leary-plugin-gateway
+    newTag: test-initial
+  - name: leary-backend
+    newName: 192.168.31.160:15001/leary-backend
+    newTag: test-initial
+  - name: leary-agent
+    newName: 192.168.31.160:15001/leary-agent
+    newTag: test-initial
+  - name: leary-task
+    newName: 192.168.31.160:15001/leary-task
+    newTag: test-initial
+
+patches:
+  - path: overlays/external-kb/patch-agent-configmap.yaml
+  - path: overlays/external-kb/patch-taskserver-configmap.yaml

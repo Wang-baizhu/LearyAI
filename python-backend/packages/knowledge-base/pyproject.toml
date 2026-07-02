@@ -1,0 +1,33 @@
+[project]
+name = "knowledge-base"
+version = "0.1.0"
+description = "Knowledge base utilities for Kimi RAG workflows."
+requires-python = ">=3.11"
+dependencies = [
+    "llama-index>=0.14.13",
+    "llama-index-embeddings-huggingface>=0.6.1",
+    "pgvector>=0.4.2",
+    "sqlalchemy>=2.0.46",
+    "psycopg2-binary>=2.9.11",
+    "asyncpg>=0.31.0",
+    "sentence-transformers>=5.2.0",
+    "torch",
+    "transformers>=4.57.6",
+    "fast-langdetect>=0.2.3,<0.3.0",
+    "huggingface-hub>=0.34.0",
+    "paddleocr",
+    # TODO: 默认 CPU 版先保留注释，当前开发机改用 GPU 版 Paddle，后续适配不同用户。
+    # "paddlepaddle",
+    "paddlepaddle-gpu==3.3.0 ; sys_platform == 'linux' and platform_machine == 'x86_64'",
+    "pymupdf>=1.26.7",
+    "PyPDF2",
+    "docx",
+    "python-pptx",
+]
+
+[build-system]
+requires = ["uv_build>=0.8.5,<0.10.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = ["knowledge_base"]

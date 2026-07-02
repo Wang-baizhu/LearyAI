@@ -1,0 +1,17 @@
+# 职责：开发环境后端镜像，使用 spring-boot:run 并支持挂载 src 实时调试
+# 构建：docker build -f backend/docker/dockerfile.dev -t learyai-backend-dev .
+# 运行：docker run --env-file backend/docker/env.list -p 8080:8080 --rm -v "$PWD/backend/learyAI/src:/workspace/learyAI/src" learyai-backend-dev
+
+FROM maven:3.9.6-eclipse-temurin-17
+WORKDIR /workspace/learyAI
+
+# 只拷贝构建所需文件，便于缓存依赖
+COPY backend/learyAI/pom.xml /workspace/learyAI/pom.xml
+COPY backend/learyAI/.mvn /workspace/learyAI/.mvn
+COPY backend/learyAI/mvnw /workspace/learyAI/mvnw
+COPY backend/learyAI/mvnw.cmd /workspace/learyAI/mvnw.cmd
+
+RUN ./mvnw -DskipTests dependency:go-offline
+
+EXPOSE 8080
+ENTRYPOINT ["./mvnw", "-DskipTests", "spring-boot:run"]

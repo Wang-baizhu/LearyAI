@@ -1,0 +1,29 @@
+__pycache__
+*.pdf
+*.egg-info
+.cache
+
+# 模型
+models
+
+# 环境
+.env
+
+# 简单模块的开发验证
+dev
+
+# 输出
+output
+test_doc
+*.pdf
+*.docx
+*.jpg
+*.pptx
+workdir
+dist
+build
+logs
+
+*.csv
+.venv
+agent_runtime/config/agent/models_config/default.toml

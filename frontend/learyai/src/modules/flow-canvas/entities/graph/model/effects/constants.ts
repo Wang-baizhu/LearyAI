@@ -1,0 +1,25 @@
+/** 责任：维护白板图模型的历史、复制与布局常量。 */
+export const HISTORY_LIMIT = 50;
+export const DEFAULT_LAYOUT_NODE_WIDTH = 150;
+export const DEFAULT_LAYOUT_NODE_HEIGHT = 50;
+export const ANNOTATION_LAYOUT_GAP_X = 48;
+export const ANNOTATION_LAYOUT_GAP_Y = 16;
+export const DEFAULT_EDGE_LABEL_WIDTH = 24;
+export const DEFAULT_EDGE_LABEL_HEIGHT = 24;
+export const PARALLEL_EDGE_OFFSET_STEP = 40;
+export const EDGE_LABEL_CHAR_WIDTH = 12;
+export const EDGE_LABEL_HORIZONTAL_PADDING = 32;
+export const EDGE_LABEL_LINE_HEIGHT = 24;
+export const EDGE_LABEL_MAX_WIDTH = 240;
+export const EDGE_LABEL_MIN_WIDTH = 48;
+export const LAYOUT_COLUMN_X_TOLERANCE = 24;
+export const TAG_GROUP_INNER_GAP = 32;
+export const TAG_GROUP_OUTER_GAP = 64;
+export const DUPLICATE_NODE_OFFSET = 40;
+export const CLUSTER_LAYOUT_PADDING_X = 64;
+export const CLUSTER_LAYOUT_PADDING_Y = 48;
+export const CLUSTER_LAYOUT_GAP_X = 156;
+export const CLUSTER_LAYOUT_GAP_Y = 108;
+export const CLUSTER_NODE_GAP_Y = 28;
+export const CLUSTER_ANCHOR_MEMBER_GAP_X = 160;
+export const CLUSTER_MEMBER_GAP_Y = 24;

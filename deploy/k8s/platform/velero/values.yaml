@@ -1,0 +1,29 @@
+# 当前文件职责：固定 learyAI 的 Velero 安装 values。
+configuration:
+  backupStorageLocation:
+    - name: default
+      provider: aws
+      bucket: change-me
+      config:
+        region: ap-east-1
+        s3ForcePathStyle: "true"
+        s3Url: https://s3.example.internal
+  volumeSnapshotLocation:
+    - name: default
+      provider: aws
+      config:
+        region: ap-east-1
+
+credentials:
+  useSecret: true
+  existingSecret: velero-credentials
+
+schedules:
+  learyai-namespace:
+    disabled: false
+    schedule: "0 */6 * * *"
+    template:
+      includedNamespaces:
+        - learyai
+      snapshotVolumes: false
+      ttl: 168h

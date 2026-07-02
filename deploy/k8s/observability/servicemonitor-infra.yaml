@@ -1,0 +1,30 @@
+# 当前文件职责：声明 PostgreSQL、Redis、RabbitMQ exporter 的 Prometheus 抓取规则。
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: learyai-infra
+  namespace: observability
+  labels:
+    release: kps
+spec:
+  namespaceSelector:
+    matchNames:
+      - observability
+  selector:
+    matchExpressions:
+      - key: app
+        operator: In
+        values:
+          - leary-postgres-exporter
+          - leary-redis-exporter
+          - leary-rabbitmq-exporter
+  endpoints:
+    - port: metrics
+      interval: 15s
+      honorLabels: true
+      relabelings:
+        - sourceLabels:
+            - __meta_kubernetes_service_label_app
+          targetLabel: job
+        - targetLabel: env
+          replacement: server

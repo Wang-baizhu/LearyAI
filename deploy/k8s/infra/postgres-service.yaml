@@ -1,0 +1,15 @@
+# 当前文件职责：为集群内 PostgreSQL 提供稳定访问入口与 StatefulSet 网络标识。
+apiVersion: v1
+kind: Service
+metadata:
+  name: leary-postgres
+  labels:
+    app: leary-postgres
+spec:
+  clusterIP: None
+  selector:
+    app: leary-postgres
+  ports:
+    - name: postgres
+      port: 5432
+      targetPort: postgres

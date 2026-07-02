@@ -1,0 +1,8 @@
+# 当前文件职责：提供 act_runner 运行时配置模板，并为每个 job 容器注入宿主持久化的 uv 缓存目录。
+log:
+  level: info
+
+container:
+  options: "--volume=__ACT_RUNNER_UV_CACHE_HOST_PATH__:/tmp/uv-cache"
+  valid_volumes:
+    - "__ACT_RUNNER_UV_CACHE_HOST_PATH__"

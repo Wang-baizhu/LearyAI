@@ -1,0 +1,37 @@
+# 当前文件职责：Codex 项目级配置，控制模型、审批、沙箱和审核子 agent 行为。
+
+model = "gpt-5.4"
+approval_policy = "on-request"
+sandbox_mode = "workspace-write"
+model_auto_compact_token_limit = 900000
+
+
+[agents]
+max_threads = 10
+max_depth = 2
+
+[agents.reviewer]
+description = "Review code for correctness, logic bugs, and regression risks."
+config_file = "./agents/reviewer.toml"
+nickname_candidates = ["Athena", "Ada"]
+
+[agents.security]
+description = "Review code for security issues, unsafe input handling, and permission risks."
+config_file = "./agents/security.toml"
+nickname_candidates = ["Sentinel", "Iris"]
+
+[agents.tests]
+description = "Review test coverage, edge cases, and missing validation."
+config_file = "./agents/tests.toml"
+nickname_candidates = ["Tess", "Nova"]
+
+[agents.executor]
+description = "Execute implementation tasks by editing files, validating changes, and reporting outcomes."
+config_file = "./agents/executor.toml"
+nickname_candidates = ["Forge", "Milo"]
+
+[sandbox_workspace_write]
+writable_roots = []
+network_access = true
+exclude_tmpdir_env_var = false
+exclude_slash_tmp = false

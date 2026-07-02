@@ -1,0 +1,110 @@
+# 当前文件职责：为本地联调模式提供插件预览网关，额外转发 frontend vite dev 资源。
+worker_processes  1;
+
+events {
+  worker_connections  1024;
+}
+
+http {
+  resolver ${LEARY_PLUGIN_GATEWAY_RESOLVER} ipv6=off;
+  lua_package_path "/usr/local/openresty/lualib/?.lua;;";
+
+  server {
+    listen 7999;
+    server_name _;
+
+    location ^~ /@vite/ {
+      proxy_pass ${LEARY_FRONTEND_DEV_BASE_URL};
+    }
+
+    location = /@react-refresh {
+      proxy_pass ${LEARY_FRONTEND_DEV_BASE_URL};
+    }
+
+    location ^~ /@id/ {
+      proxy_pass ${LEARY_FRONTEND_DEV_BASE_URL};
+    }
+
+    location ^~ /@fs/ {
+      proxy_pass ${LEARY_FRONTEND_DEV_BASE_URL};
+    }
+
+    location ^~ /src/ {
+      proxy_pass ${LEARY_FRONTEND_DEV_BASE_URL};
+    }
+
+    location ^~ /node_modules/ {
+      proxy_pass ${LEARY_FRONTEND_DEV_BASE_URL};
+    }
+
+    location = /vite.svg {
+      proxy_pass ${LEARY_FRONTEND_DEV_BASE_URL};
+    }
+
+    location ~ ^/preview/([^/]+)(?:/(.*))?$ {
+      set $plugin_id $1;
+      set $preview_path $2;
+      set $origin_url "";
+      set $preview_cache_mode "asset";
+
+      access_by_lua_block {
+        local http = require("resty.http")
+        local cjson = require("cjson.safe")
+
+        local plugin_id = ngx.var.plugin_id
+        local preview_path = ngx.var.preview_path or ""
+        if preview_path == "" then
+          preview_path = "index.html"
+        end
+
+        local auth_base_url = "${LEARY_BACKEND_INTERNAL_BASE_URL}"
+        local auth_url = auth_base_url
+          .. "/" .. plugin_id .. "/preview-authorize?path=" .. ngx.escape_uri(preview_path)
+
+        local client = http.new()
+        local res, err = client:request_uri(auth_url, {
+          method = "GET",
+          headers = {
+            Cookie = ngx.var.http_cookie or "",
+            ["X-Forwarded-Host"] = ngx.var.host,
+            ["X-Forwarded-Proto"] = ngx.var.scheme,
+          },
+        })
+        if not res then
+          ngx.status = ngx.HTTP_BAD_GATEWAY
+          ngx.say("preview auth upstream unavailable: " .. (err or "unknown"))
+          return ngx.exit(ngx.HTTP_BAD_GATEWAY)
+        end
+        if res.status ~= 200 then
+          ngx.status = res.status
+          if res.body and #res.body > 0 then
+            ngx.print(res.body)
+          end
+          return ngx.exit(res.status)
+        end
+
+        local payload = cjson.decode(res.body or "")
+        local data = payload and payload.data or nil
+        if not data or type(data.originUrl) ~= "string" or data.originUrl == "" then
+          ngx.status = ngx.HTTP_BAD_GATEWAY
+          ngx.say("preview auth response missing originUrl")
+          return ngx.exit(ngx.HTTP_BAD_GATEWAY)
+        end
+
+        ngx.var.origin_url = data.originUrl
+        ngx.var.preview_cache_mode = data.cacheMode or "asset"
+      }
+
+      proxy_ssl_server_name on;
+      proxy_pass $origin_url;
+      proxy_hide_header Cache-Control;
+      add_header Cache-Control "public, max-age=7200" always;
+
+      header_filter_by_lua_block {
+        if ngx.var.preview_cache_mode == "entry" then
+          ngx.header["Cache-Control"] = "no-cache"
+        end
+      }
+    }
+  }
+}

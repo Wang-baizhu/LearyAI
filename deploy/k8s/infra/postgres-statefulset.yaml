@@ -1,0 +1,73 @@
+# 当前文件职责：部署集群内 PostgreSQL，复用 deploy/pg 的自定义镜像与初始化 SQL，并通过 PVC 持久化数据。
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: leary-postgres
+spec:
+  serviceName: leary-postgres
+  replicas: 1
+  selector:
+    matchLabels:
+      app: leary-postgres
+  template:
+    metadata:
+      labels:
+        app: leary-postgres
+    spec:
+      containers:
+        - name: postgres
+          image: 192.168.31.160:15001/leary-pg:latest
+          imagePullPolicy: Always
+          ports:
+            - name: postgres
+              containerPort: 5432
+          envFrom:
+            - secretRef:
+                name: leary-postgres-secret
+          volumeMounts:
+            - name: postgres-data
+              mountPath: /var/lib/postgresql/data
+            - name: postgres-init
+              mountPath: /docker-entrypoint-initdb.d
+              readOnly: true
+          readinessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - pg_isready -U "$POSTGRES_USER" -d "$POSTGRES_DB"
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          livenessProbe:
+            exec:
+              command:
+                - /bin/sh
+                - -c
+                - pg_isready -U "$POSTGRES_USER" -d "$POSTGRES_DB"
+            initialDelaySeconds: 30
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi
+      volumes:
+        - name: postgres-init
+          configMap:
+            name: leary-postgres-init
+            items:
+              - key: 01-init-pgvector.sql
+                path: 01-init-pgvector.sql
+              - key: 02-init-pg-jieba.sql
+                path: 02-init-pg-jieba.sql
+  volumeClaimTemplates:
+    - metadata:
+        name: postgres-data
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 20Gi

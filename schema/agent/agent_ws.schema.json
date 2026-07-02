@@ -1,0 +1,2213 @@
+{
+  "$defs": {
+    "AckPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Status"
+        },
+        "resolved": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Resolved"
+        },
+        "toolCallId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Toolcallid"
+        },
+        "requestId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Requestid"
+        }
+      },
+      "title": "AckPayload",
+      "type": "object"
+    },
+    "AgentCancelledEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "meta": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WsMeta"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "event": {
+          "const": "agent.cancelled",
+          "default": "agent.cancelled",
+          "title": "Event",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/AgentQueryResultPayload"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "AgentCancelledEnvelope",
+      "type": "object"
+    },
+    "AgentQueryResultPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Status"
+        },
+        "stopReason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Stopreason"
+        }
+      },
+      "title": "AgentQueryResultPayload",
+      "type": "object"
+    },
+    "AgentResultEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "meta": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WsMeta"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "event": {
+          "const": "agent.result",
+          "default": "agent.result",
+          "title": "Event",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/AgentQueryResultPayload"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "AgentResultEnvelope",
+      "type": "object"
+    },
+    "ConnectionReplacedEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "meta": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WsMeta"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "event": {
+          "const": "connection:replaced",
+          "default": "connection:replaced",
+          "title": "Event",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/ConnectionReplacedPayload"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "ConnectionReplacedEnvelope",
+      "type": "object"
+    },
+    "ConnectionReplacedPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "message": {
+          "title": "Message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "message"
+      ],
+      "title": "ConnectionReplacedPayload",
+      "type": "object"
+    },
+    "ErrorEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "meta": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WsMeta"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "event": {
+          "const": "error",
+          "default": "error",
+          "title": "Event",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/ErrorPayload"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "ErrorEnvelope",
+      "type": "object"
+    },
+    "ErrorPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "title": "Code",
+          "type": "string"
+        },
+        "message": {
+          "title": "Message",
+          "type": "string"
+        }
+      },
+      "required": [
+        "code",
+        "message"
+      ],
+      "title": "ErrorPayload",
+      "type": "object"
+    },
+    "HookAckEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "meta": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WsMeta"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "event": {
+          "const": "hook:ack",
+          "default": "hook:ack",
+          "title": "Event",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/AckPayload"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "HookAckEnvelope",
+      "type": "object"
+    },
+    "HookRequestEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "meta": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WsMeta"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "event": {
+          "const": "hook:request",
+          "default": "hook:request",
+          "title": "Event",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/HookRequestPayload"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "HookRequestEnvelope",
+      "type": "object"
+    },
+    "HookRequestPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "agentSessionId": {
+          "title": "Agentsessionid",
+          "type": "string"
+        },
+        "requestId": {
+          "title": "Requestid",
+          "type": "string"
+        },
+        "hookEvent": {
+          "title": "Hookevent",
+          "type": "string"
+        },
+        "subscriptionId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Subscriptionid"
+        },
+        "target": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Target"
+        },
+        "inputData": {
+          "anyOf": [
+            {
+              "additionalProperties": {
+                "type": "string"
+              },
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Inputdata"
+        },
+        "options": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Options"
+        }
+      },
+      "required": [
+        "agentSessionId",
+        "requestId",
+        "hookEvent"
+      ],
+      "title": "HookRequestPayload",
+      "type": "object"
+    },
+    "MessagesUpdatedEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "meta": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WsMeta"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "event": {
+          "const": "messages:updated",
+          "default": "messages:updated",
+          "title": "Event",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/MessagesUpdatedPayload"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "MessagesUpdatedEnvelope",
+      "type": "object"
+    },
+    "MessagesUpdatedPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "blocks": {
+          "items": {
+            "$ref": "#/$defs/WireBlock"
+          },
+          "title": "Blocks",
+          "type": "array"
+        },
+        "isStreaming": {
+          "title": "Isstreaming",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "blocks",
+        "isStreaming"
+      ],
+      "title": "MessagesUpdatedPayload",
+      "type": "object"
+    },
+    "PermissionAckEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "meta": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WsMeta"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "event": {
+          "const": "permission:ack",
+          "default": "permission:ack",
+          "title": "Event",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/AckPayload"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "PermissionAckEnvelope",
+      "type": "object"
+    },
+    "PermissionRequestEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "meta": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WsMeta"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "event": {
+          "const": "permission:request",
+          "default": "permission:request",
+          "title": "Event",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/PermissionRequestPayload"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "PermissionRequestEnvelope",
+      "type": "object"
+    },
+    "PermissionRequestPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "agentSessionId": {
+          "title": "Agentsessionid",
+          "type": "string"
+        },
+        "requestId": {
+          "title": "Requestid",
+          "type": "string"
+        },
+        "toolCallId": {
+          "title": "Toolcallid",
+          "type": "string"
+        },
+        "sender": {
+          "title": "Sender",
+          "type": "string"
+        },
+        "action": {
+          "title": "Action",
+          "type": "string"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "sourceKind": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sourcekind"
+        },
+        "sourceId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sourceid"
+        },
+        "agentId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Agentid"
+        },
+        "subagentType": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Subagenttype"
+        },
+        "sourceDescription": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sourcedescription"
+        }
+      },
+      "required": [
+        "agentSessionId",
+        "requestId",
+        "toolCallId",
+        "sender",
+        "action",
+        "description"
+      ],
+      "title": "PermissionRequestPayload",
+      "type": "object"
+    },
+    "QueryStateEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "meta": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WsMeta"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "event": {
+          "const": "query:state",
+          "default": "query:state",
+          "title": "Event",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/QueryStatePayload"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "QueryStateEnvelope",
+      "type": "object"
+    },
+    "QueryStatePayload": {
+      "additionalProperties": false,
+      "properties": {
+        "agentSessionId": {
+          "title": "Agentsessionid",
+          "type": "string"
+        },
+        "subagentId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Subagentid"
+        },
+        "isStreaming": {
+          "title": "Isstreaming",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "agentSessionId",
+        "isStreaming"
+      ],
+      "title": "QueryStatePayload",
+      "type": "object"
+    },
+    "QuestionAckEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "meta": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WsMeta"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "event": {
+          "const": "question:ack",
+          "default": "question:ack",
+          "title": "Event",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/AckPayload"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "QuestionAckEnvelope",
+      "type": "object"
+    },
+    "QuestionItem": {
+      "description": "A single question to ask the user.",
+      "properties": {
+        "question": {
+          "title": "Question",
+          "type": "string"
+        },
+        "header": {
+          "default": "",
+          "title": "Header",
+          "type": "string"
+        },
+        "options": {
+          "items": {
+            "$ref": "#/$defs/QuestionOption"
+          },
+          "title": "Options",
+          "type": "array"
+        },
+        "multi_select": {
+          "default": false,
+          "title": "Multi Select",
+          "type": "boolean"
+        },
+        "body": {
+          "default": "",
+          "title": "Body",
+          "type": "string"
+        },
+        "other_label": {
+          "default": "",
+          "title": "Other Label",
+          "type": "string"
+        },
+        "other_description": {
+          "default": "",
+          "title": "Other Description",
+          "type": "string"
+        }
+      },
+      "required": [
+        "question",
+        "options"
+      ],
+      "title": "QuestionItem",
+      "type": "object"
+    },
+    "QuestionOption": {
+      "description": "A single option for a question.",
+      "properties": {
+        "label": {
+          "title": "Label",
+          "type": "string"
+        },
+        "description": {
+          "default": "",
+          "title": "Description",
+          "type": "string"
+        }
+      },
+      "required": [
+        "label"
+      ],
+      "title": "QuestionOption",
+      "type": "object"
+    },
+    "QuestionRequestEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "meta": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WsMeta"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "event": {
+          "const": "question:request",
+          "default": "question:request",
+          "title": "Event",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/QuestionRequestPayload"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "QuestionRequestEnvelope",
+      "type": "object"
+    },
+    "QuestionRequestPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "agentSessionId": {
+          "title": "Agentsessionid",
+          "type": "string"
+        },
+        "requestId": {
+          "title": "Requestid",
+          "type": "string"
+        },
+        "toolCallId": {
+          "title": "Toolcallid",
+          "type": "string"
+        },
+        "questions": {
+          "items": {
+            "$ref": "#/$defs/QuestionItem"
+          },
+          "title": "Questions",
+          "type": "array"
+        }
+      },
+      "required": [
+        "agentSessionId",
+        "requestId",
+        "toolCallId",
+        "questions"
+      ],
+      "title": "QuestionRequestPayload",
+      "type": "object"
+    },
+    "SessionContextEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "meta": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WsMeta"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "event": {
+          "const": "session:context",
+          "default": "session:context",
+          "title": "Event",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/SessionContextPayload"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "SessionContextEnvelope",
+      "type": "object"
+    },
+    "SessionContextPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "agentSessionId": {
+          "title": "Agentsessionid",
+          "type": "string"
+        },
+        "blocks": {
+          "items": {
+            "$ref": "#/$defs/WireBlock"
+          },
+          "title": "Blocks",
+          "type": "array"
+        },
+        "isStreaming": {
+          "title": "Isstreaming",
+          "type": "boolean"
+        },
+        "prepend": {
+          "default": false,
+          "title": "Prepend",
+          "type": "boolean"
+        },
+        "hasMore": {
+          "default": false,
+          "title": "Hasmore",
+          "type": "boolean"
+        },
+        "nextBeforeSeq": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Nextbeforeseq"
+        },
+        "startSeq": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Startseq"
+        },
+        "endSeq": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Endseq"
+        }
+      },
+      "required": [
+        "agentSessionId",
+        "blocks",
+        "isStreaming"
+      ],
+      "title": "SessionContextPayload",
+      "type": "object"
+    },
+    "SessionCreatedEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "meta": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WsMeta"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "event": {
+          "const": "session:created",
+          "default": "session:created",
+          "title": "Event",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/SessionCreatedPayload"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "SessionCreatedEnvelope",
+      "type": "object"
+    },
+    "SessionCreatedPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "agentSessionId": {
+          "title": "Agentsessionid",
+          "type": "string"
+        },
+        "status": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Status"
+        },
+        "name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Name"
+        },
+        "sessionType": {
+          "anyOf": [
+            {
+              "enum": [
+                "main",
+                "subagent"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sessiontype"
+        },
+        "parentSessionId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Parentsessionid"
+        },
+        "subagentType": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Subagenttype"
+        }
+      },
+      "required": [
+        "agentSessionId"
+      ],
+      "title": "SessionCreatedPayload",
+      "type": "object"
+    },
+    "SessionListEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "meta": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WsMeta"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "event": {
+          "const": "session:list",
+          "default": "session:list",
+          "title": "Event",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/SessionListPayload"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "SessionListEnvelope",
+      "type": "object"
+    },
+    "SessionListItem": {
+      "additionalProperties": false,
+      "properties": {
+        "agentSessionId": {
+          "title": "Agentsessionid",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "kbId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Kbid"
+        },
+        "updatedAt": {
+          "title": "Updatedat",
+          "type": "string"
+        },
+        "sessionType": {
+          "anyOf": [
+            {
+              "enum": [
+                "main",
+                "subagent"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Sessiontype"
+        },
+        "parentSessionId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Parentsessionid"
+        },
+        "subagentType": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Subagenttype"
+        },
+        "status": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Status"
+        },
+        "isStreaming": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Isstreaming"
+        },
+        "pendingPermissionCount": {
+          "default": 0,
+          "title": "Pendingpermissioncount",
+          "type": "integer"
+        },
+        "pendingQuestionCount": {
+          "default": 0,
+          "title": "Pendingquestioncount",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "agentSessionId",
+        "name",
+        "updatedAt"
+      ],
+      "title": "SessionListItem",
+      "type": "object"
+    },
+    "SessionListPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "sessions": {
+          "items": {
+            "$ref": "#/$defs/SessionListItem"
+          },
+          "title": "Sessions",
+          "type": "array"
+        },
+        "append": {
+          "default": false,
+          "title": "Append",
+          "type": "boolean"
+        },
+        "hasMore": {
+          "default": false,
+          "title": "Hasmore",
+          "type": "boolean"
+        },
+        "nextCursor": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Nextcursor"
+        }
+      },
+      "required": [
+        "sessions"
+      ],
+      "title": "SessionListPayload",
+      "type": "object"
+    },
+    "SessionRemovedEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "meta": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WsMeta"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "event": {
+          "const": "session:removed",
+          "default": "session:removed",
+          "title": "Event",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/SessionRemovedPayload"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "SessionRemovedEnvelope",
+      "type": "object"
+    },
+    "SessionRemovedPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "agentSessionId": {
+          "title": "Agentsessionid",
+          "type": "string"
+        },
+        "deleted": {
+          "title": "Deleted",
+          "type": "boolean"
+        },
+        "reason": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reason"
+        }
+      },
+      "required": [
+        "agentSessionId",
+        "deleted"
+      ],
+      "title": "SessionRemovedPayload",
+      "type": "object"
+    },
+    "SessionRenamedEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "meta": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WsMeta"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "event": {
+          "const": "session:renamed",
+          "default": "session:renamed",
+          "title": "Event",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/SessionRenamedPayload"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "SessionRenamedEnvelope",
+      "type": "object"
+    },
+    "SessionRenamedPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "agentSessionId": {
+          "title": "Agentsessionid",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "renamed": {
+          "title": "Renamed",
+          "type": "boolean"
+        },
+        "status": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Status"
+        }
+      },
+      "required": [
+        "agentSessionId",
+        "name",
+        "renamed"
+      ],
+      "title": "SessionRenamedPayload",
+      "type": "object"
+    },
+    "SessionResyncRequiredEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "meta": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WsMeta"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "event": {
+          "const": "session:resync_required",
+          "default": "session:resync_required",
+          "title": "Event",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/SessionResyncRequiredPayload"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "SessionResyncRequiredEnvelope",
+      "type": "object"
+    },
+    "SessionResyncRequiredPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "agentSessionId": {
+          "title": "Agentsessionid",
+          "type": "string"
+        },
+        "reason": {
+          "enum": [
+            "buffer_overflow",
+            "buffer_timeout"
+          ],
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "agentSessionId",
+        "reason"
+      ],
+      "title": "SessionResyncRequiredPayload",
+      "type": "object"
+    },
+    "SessionStatusEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "meta": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WsMeta"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "event": {
+          "const": "session:status",
+          "default": "session:status",
+          "title": "Event",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/SessionStatusPayload"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "SessionStatusEnvelope",
+      "type": "object"
+    },
+    "SessionStatusPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "agentSessionId": {
+          "title": "Agentsessionid",
+          "type": "string"
+        },
+        "exists": {
+          "title": "Exists",
+          "type": "boolean"
+        },
+        "isStreaming": {
+          "title": "Isstreaming",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "agentSessionId",
+        "exists",
+        "isStreaming"
+      ],
+      "title": "SessionStatusPayload",
+      "type": "object"
+    },
+    "SessionSubagentContextEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "meta": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WsMeta"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "event": {
+          "const": "session:subagent_context",
+          "default": "session:subagent_context",
+          "title": "Event",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/SessionSubagentContextPayload"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "SessionSubagentContextEnvelope",
+      "type": "object"
+    },
+    "SessionSubagentContextPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "agentSessionId": {
+          "title": "Agentsessionid",
+          "type": "string"
+        },
+        "subagentId": {
+          "title": "Subagentid",
+          "type": "string"
+        },
+        "blocks": {
+          "items": {
+            "$ref": "#/$defs/WireBlock"
+          },
+          "title": "Blocks",
+          "type": "array"
+        },
+        "isStreaming": {
+          "title": "Isstreaming",
+          "type": "boolean"
+        },
+        "prepend": {
+          "default": false,
+          "title": "Prepend",
+          "type": "boolean"
+        },
+        "hasMore": {
+          "default": false,
+          "title": "Hasmore",
+          "type": "boolean"
+        },
+        "nextBeforeSeq": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Nextbeforeseq"
+        },
+        "startSeq": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Startseq"
+        },
+        "endSeq": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Endseq"
+        }
+      },
+      "required": [
+        "agentSessionId",
+        "subagentId",
+        "blocks",
+        "isStreaming"
+      ],
+      "title": "SessionSubagentContextPayload",
+      "type": "object"
+    },
+    "SessionSubagentListEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "meta": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WsMeta"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "event": {
+          "const": "session:subagent_list",
+          "default": "session:subagent_list",
+          "title": "Event",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/SessionSubagentListPayload"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "SessionSubagentListEnvelope",
+      "type": "object"
+    },
+    "SessionSubagentListPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "agentSessionId": {
+          "title": "Agentsessionid",
+          "type": "string"
+        },
+        "subagents": {
+          "items": {
+            "$ref": "#/$defs/SubagentSessionItem"
+          },
+          "title": "Subagents",
+          "type": "array"
+        }
+      },
+      "required": [
+        "agentSessionId",
+        "subagents"
+      ],
+      "title": "SessionSubagentListPayload",
+      "type": "object"
+    },
+    "SessionSubagentStateEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "meta": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WsMeta"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "event": {
+          "const": "session:subagent_state",
+          "default": "session:subagent_state",
+          "title": "Event",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/SessionSubagentStatePayload"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "SessionSubagentStateEnvelope",
+      "type": "object"
+    },
+    "SessionSubagentStatePayload": {
+      "additionalProperties": false,
+      "properties": {
+        "agentSessionId": {
+          "title": "Agentsessionid",
+          "type": "string"
+        },
+        "subagent": {
+          "$ref": "#/$defs/SubagentSessionItem"
+        }
+      },
+      "required": [
+        "agentSessionId",
+        "subagent"
+      ],
+      "title": "SessionSubagentStatePayload",
+      "type": "object"
+    },
+    "SessionSummaryPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "agentSessionId": {
+          "title": "Agentsessionid",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "kbId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Kbid"
+        },
+        "updatedAt": {
+          "title": "Updatedat",
+          "type": "string"
+        },
+        "sessionType": {
+          "enum": [
+            "main",
+            "subagent"
+          ],
+          "title": "Sessiontype",
+          "type": "string"
+        },
+        "parentSessionId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Parentsessionid"
+        },
+        "subagentType": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Subagenttype"
+        },
+        "status": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Status"
+        },
+        "isStreaming": {
+          "title": "Isstreaming",
+          "type": "boolean"
+        },
+        "pendingPermissionCount": {
+          "default": 0,
+          "title": "Pendingpermissioncount",
+          "type": "integer"
+        },
+        "pendingQuestionCount": {
+          "default": 0,
+          "title": "Pendingquestioncount",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "agentSessionId",
+        "name",
+        "updatedAt",
+        "sessionType",
+        "isStreaming"
+      ],
+      "title": "SessionSummaryPayload",
+      "type": "object"
+    },
+    "SessionSummaryUpdatedEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "meta": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WsMeta"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "event": {
+          "const": "session:summary_updated",
+          "default": "session:summary_updated",
+          "title": "Event",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/SessionSummaryPayload"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "SessionSummaryUpdatedEnvelope",
+      "type": "object"
+    },
+    "SkillsInstalledEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "meta": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WsMeta"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "event": {
+          "const": "skills:installed",
+          "default": "skills:installed",
+          "title": "Event",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/SkillsPayload"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "SkillsInstalledEnvelope",
+      "type": "object"
+    },
+    "SkillsLoadedEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "meta": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WsMeta"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "event": {
+          "const": "skills:loaded",
+          "default": "skills:loaded",
+          "title": "Event",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/SkillsPayload"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "SkillsLoadedEnvelope",
+      "type": "object"
+    },
+    "SkillsPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "title": "Status",
+          "type": "string"
+        }
+      },
+      "required": [
+        "status"
+      ],
+      "title": "SkillsPayload",
+      "type": "object"
+    },
+    "SkillsUninstalledEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "meta": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WsMeta"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "event": {
+          "const": "skills:uninstalled",
+          "default": "skills:uninstalled",
+          "title": "Event",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/SkillsPayload"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "SkillsUninstalledEnvelope",
+      "type": "object"
+    },
+    "SubagentSessionItem": {
+      "additionalProperties": false,
+      "properties": {
+        "agentId": {
+          "title": "Agentid",
+          "type": "string"
+        },
+        "parentSessionId": {
+          "title": "Parentsessionid",
+          "type": "string"
+        },
+        "subagentType": {
+          "title": "Subagenttype",
+          "type": "string"
+        },
+        "title": {
+          "title": "Title",
+          "type": "string"
+        },
+        "status": {
+          "title": "Status",
+          "type": "string"
+        },
+        "updatedAt": {
+          "title": "Updatedat",
+          "type": "string"
+        },
+        "pendingPermissionCount": {
+          "default": 0,
+          "title": "Pendingpermissioncount",
+          "type": "integer"
+        },
+        "pendingQuestionCount": {
+          "default": 0,
+          "title": "Pendingquestioncount",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "agentId",
+        "parentSessionId",
+        "subagentType",
+        "title",
+        "status",
+        "updatedAt"
+      ],
+      "title": "SubagentSessionItem",
+      "type": "object"
+    },
+    "ToolAckEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "meta": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WsMeta"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "event": {
+          "const": "tool:ack",
+          "default": "tool:ack",
+          "title": "Event",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/AckPayload"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "ToolAckEnvelope",
+      "type": "object"
+    },
+    "ToolRequestEnvelope": {
+      "additionalProperties": false,
+      "properties": {
+        "meta": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/WsMeta"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "event": {
+          "const": "tool:request",
+          "default": "tool:request",
+          "title": "Event",
+          "type": "string"
+        },
+        "payload": {
+          "$ref": "#/$defs/ToolRequestPayload"
+        }
+      },
+      "required": [
+        "payload"
+      ],
+      "title": "ToolRequestEnvelope",
+      "type": "object"
+    },
+    "ToolRequestPayload": {
+      "additionalProperties": false,
+      "properties": {
+        "agentSessionId": {
+          "title": "Agentsessionid",
+          "type": "string"
+        },
+        "toolCallId": {
+          "title": "Toolcallid",
+          "type": "string"
+        },
+        "name": {
+          "title": "Name",
+          "type": "string"
+        },
+        "arguments": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Arguments"
+        }
+      },
+      "required": [
+        "agentSessionId",
+        "toolCallId",
+        "name"
+      ],
+      "title": "ToolRequestPayload",
+      "type": "object"
+    },
+    "WireBlock": {
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "title": "Type",
+          "type": "string"
+        },
+        "payload": {
+          "anyOf": [
+            {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Payload"
+        },
+        "payload_json": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Payload Json"
+        }
+      },
+      "required": [
+        "type"
+      ],
+      "title": "WireBlock",
+      "type": "object"
+    },
+    "WsMeta": {
+      "additionalProperties": false,
+      "properties": {
+        "agentSessionId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Agentsessionid"
+        },
+        "subagentId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Subagentid"
+        },
+        "userId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Userid"
+        },
+        "projectId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Projectid"
+        },
+        "kbId": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Kbid"
+        }
+      },
+      "title": "WsMeta",
+      "type": "object"
+    }
+  },
+  "anyOf": [
+    {
+      "$ref": "#/$defs/SessionListEnvelope"
+    },
+    {
+      "$ref": "#/$defs/SessionCreatedEnvelope"
+    },
+    {
+      "$ref": "#/$defs/SessionRemovedEnvelope"
+    },
+    {
+      "$ref": "#/$defs/SessionRenamedEnvelope"
+    },
+    {
+      "$ref": "#/$defs/SessionStatusEnvelope"
+    },
+    {
+      "$ref": "#/$defs/SessionResyncRequiredEnvelope"
+    },
+    {
+      "$ref": "#/$defs/SessionContextEnvelope"
+    },
+    {
+      "$ref": "#/$defs/SessionSubagentListEnvelope"
+    },
+    {
+      "$ref": "#/$defs/SessionSubagentStateEnvelope"
+    },
+    {
+      "$ref": "#/$defs/SessionSummaryUpdatedEnvelope"
+    },
+    {
+      "$ref": "#/$defs/SessionSubagentContextEnvelope"
+    },
+    {
+      "$ref": "#/$defs/MessagesUpdatedEnvelope"
+    },
+    {
+      "$ref": "#/$defs/QueryStateEnvelope"
+    },
+    {
+      "$ref": "#/$defs/AgentResultEnvelope"
+    },
+    {
+      "$ref": "#/$defs/AgentCancelledEnvelope"
+    },
+    {
+      "$ref": "#/$defs/ErrorEnvelope"
+    },
+    {
+      "$ref": "#/$defs/PermissionRequestEnvelope"
+    },
+    {
+      "$ref": "#/$defs/PermissionAckEnvelope"
+    },
+    {
+      "$ref": "#/$defs/QuestionRequestEnvelope"
+    },
+    {
+      "$ref": "#/$defs/QuestionAckEnvelope"
+    },
+    {
+      "$ref": "#/$defs/HookRequestEnvelope"
+    },
+    {
+      "$ref": "#/$defs/HookAckEnvelope"
+    },
+    {
+      "$ref": "#/$defs/ToolRequestEnvelope"
+    },
+    {
+      "$ref": "#/$defs/ToolAckEnvelope"
+    },
+    {
+      "$ref": "#/$defs/ConnectionReplacedEnvelope"
+    },
+    {
+      "$ref": "#/$defs/SkillsLoadedEnvelope"
+    },
+    {
+      "$ref": "#/$defs/SkillsInstalledEnvelope"
+    },
+    {
+      "$ref": "#/$defs/SkillsUninstalledEnvelope"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+# 当前文件职责：部署模板插件独立预览网关。
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: leary-plugin-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: leary-plugin-gateway
+  template:
+    metadata:
+      labels:
+        app: leary-plugin-gateway
+    spec:
+      containers:
+        - name: leary-plugin-gateway
+          image: leary-plugin-gateway:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 7999
+          env:
+            - name: LEARY_BACKEND_INTERNAL_BASE_URL
+              value: http://leary-backend:8080/api/templates/internal/plugins
+            - name: LEARY_PLUGIN_GATEWAY_RESOLVER
+              value: kube-dns.kube-system.svc.cluster.local
+          readinessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 10
+            failureThreshold: 3
+          livenessProbe:
+            tcpSocket:
+              port: http
+            periodSeconds: 20
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi

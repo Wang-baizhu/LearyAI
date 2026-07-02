@@ -1,0 +1,49 @@
+# 当前文件职责：部署 RabbitMQ exporter，通过管理 API 采集集群内 RabbitMQ 指标。
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: leary-rabbitmq-exporter
+  namespace: observability
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: leary-rabbitmq-exporter
+  template:
+    metadata:
+      labels:
+        app: leary-rabbitmq-exporter
+    spec:
+      containers:
+        - name: rabbitmq-exporter
+          image: kbudde/rabbitmq-exporter:1.0.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: metrics
+              containerPort: 9419
+          env:
+            - name: RABBIT_URL
+              value: http://leary-rabbitmq.learyai.svc.cluster.local:15672
+            - name: RABBIT_USER
+              valueFrom:
+                secretKeyRef:
+                  name: leary-rabbitmq-exporter-secret
+                  key: RABBIT_USER
+            - name: RABBIT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: leary-rabbitmq-exporter-secret
+                  key: RABBIT_PASSWORD
+            - name: PUBLISH_PORT
+              value: "9419"
+            - name: INCLUDE_QUEUES
+              value: ".*"
+            - name: INCLUDE_VHOST
+              value: ".*"
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi

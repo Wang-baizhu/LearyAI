@@ -1,0 +1,8 @@
+# 忽略不需要的上下文，缩小构建体积
+docs
+learyAI/target
+*.log
+*.tmp
+.idea
+.vscode
+*.iml

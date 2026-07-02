@@ -1,0 +1,30 @@
+{
+  "name": "@leary/arch-check",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "bin": {
+    "leary-arch-check": "./cli.mjs"
+  },
+  "main": "./index.mjs",
+  "module": "./index.mjs",
+  "files": [
+    "AGENTS.md",
+    "cli.mjs",
+    "docs",
+    "index.mjs",
+    "package.json",
+    "src"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "exports": {
+    ".": "./index.mjs",
+    "./cli": "./cli.mjs",
+    "./profiles": "./src/profiles.mjs"
+  },
+  "scripts": {
+    "test": "vitest run --config ./vitest.config.mjs"
+  }
+}

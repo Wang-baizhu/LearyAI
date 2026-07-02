@@ -1,0 +1,12 @@
+logging:
+  level:
+    org.springframework.web: INFO
+    org.springframework.web.servlet.DispatcherServlet: INFO
+    org.springframework.security: INFO
+    org.hibernate.SQL: WARN
+
+usage:
+  service:
+    grpc:
+      port: 9091
+    ak: ""

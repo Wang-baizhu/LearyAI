@@ -1,0 +1,8 @@
+packages:
+  - 'packages/*'
+  - 'packages/*/*'
+  - '../plugin-example/react'
+onlyBuiltDependencies:
+  - canvas
+  - esbuild
+  - unrs-resolver

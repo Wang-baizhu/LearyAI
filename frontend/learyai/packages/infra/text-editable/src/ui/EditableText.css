@@ -1,0 +1,66 @@
+/* 职责：为 EditableText 提供包内稳定样式，避免依赖消费方 Tailwind 扫描。 */
+
+.leary-editable-text {
+  position: relative;
+}
+
+.leary-editable-text--inline {
+  display: flex;
+  min-width: 0;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.leary-editable-text__content {
+  min-width: 0;
+}
+
+.leary-editable-text__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border: 1px solid #d4d4d8;
+  background: rgba(255, 255, 255, 0.92);
+  padding: 0.25rem 0.625rem;
+  font-size: 11px;
+  font-weight: 600;
+  color: #52525b;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition:
+    opacity 150ms ease,
+    color 150ms ease,
+    background-color 150ms ease,
+    border-color 150ms ease,
+    transform 150ms ease;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.leary-editable-text--overlay .leary-editable-text__trigger {
+  position: absolute;
+  right: 0;
+  top: 0;
+  border-radius: 9999px;
+}
+
+.leary-editable-text--inline .leary-editable-text__trigger {
+  position: static;
+  flex-shrink: 0;
+  border-radius: 9999px;
+}
+
+.leary-editable-text:hover .leary-editable-text__trigger,
+.leary-editable-text:focus-within .leary-editable-text__trigger {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.leary-editable-text__trigger:hover {
+  color: #000;
+}
+
+.leary-editable-text__trigger:focus-visible {
+  outline: 2px solid #d4af37;
+  outline-offset: 2px;
+}
+

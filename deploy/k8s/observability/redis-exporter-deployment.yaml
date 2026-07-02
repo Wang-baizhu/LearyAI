@@ -1,0 +1,38 @@
+# 当前文件职责：部署 Redis exporter，将集群内 Redis 指标暴露给 Prometheus。
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: leary-redis-exporter
+  namespace: observability
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: leary-redis-exporter
+  template:
+    metadata:
+      labels:
+        app: leary-redis-exporter
+    spec:
+      containers:
+        - name: redis-exporter
+          image: oliver006/redis_exporter:v1.61.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: metrics
+              containerPort: 9121
+          env:
+            - name: REDIS_ADDR
+              value: redis://leary-redis.learyai.svc.cluster.local:6379
+            - name: REDIS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: leary-redis-exporter-secret
+                  key: REDIS_PASSWORD
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi

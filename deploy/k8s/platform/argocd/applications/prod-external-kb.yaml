@@ -1,0 +1,18 @@
+# 当前文件职责：声明 prod-external-kb 环境的 Argo CD Application。
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: learyai-prod-external-kb
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: http://192.168.31.160:13001/XIAOBAI/LearyAI.git
+    targetRevision: deploy/prod
+    path: deploy/k8s/overlays/prod-external-kb
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: learyai
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true

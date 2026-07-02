@@ -1,0 +1,5 @@
+{
+  "name": "learyadmin",
+  "description": "一个专业的管理后台，用于监控平台用量、用户和项目资源。",
+  "requestFramePermissions": []
+}

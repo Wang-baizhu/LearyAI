@@ -1,0 +1,31 @@
+# 构建：docker build -f backend/docker/dockerfile -t leary-backend:latest .
+# 运行：docker run --env-file backend/docker/env.list -p 8080:8080 --rm leary-backend:latest
+# 这个 Dockerfile 负责在容器内完成 Maven 构建并运行打出来的 Spring Boot jar，
+# 同时示例说明了如何在运行时通过容器环境变量覆盖 application.properties 中的配置。
+
+FROM maven:3.9.6-eclipse-temurin-17 AS builder
+WORKDIR /workspace
+COPY backend/learyAI/.mvn /workspace/learyAI/.mvn
+COPY backend/learyAI/mvnw /workspace/learyAI/mvnw
+COPY backend/learyAI/pom.xml /workspace/learyAI/pom.xml
+
+WORKDIR /workspace/learyAI
+RUN ./mvnw dependency:go-offline -DskipTests
+
+COPY backend/learyAI/src /workspace/learyAI/src
+RUN ./mvnw clean package -DskipTests
+
+FROM eclipse-temurin:17-jre
+WORKDIR /app
+COPY --from=builder /workspace/learyAI/target/learyAI-0.0.1-SNAPSHOT.jar app.jar
+
+# 对应 application.properties 中的属性名，容器运行时以 SPRING_<PROPERTY> 形式提供即可覆盖：
+#   SPRING_DATASOURCE_URL
+#   SPRING_DATASOURCE_USERNAME
+#   SPRING_DATASOURCE_PASSWORD
+#   SPRING_DATA_REDIS_HOST / _PORT / _PASSWORD / _TIMEOUT
+#   SPRING_RABBITMQ_HOST / _PORT / _USERNAME / _PASSWORD / _VIRTUAL_HOST
+#   KB_STORAGE_MINIO_ENDPOINT / _BUCKET / _ACCESS_KEY / _SECRET_KEY / _PRESIGN_EXPIRE_SECONDS
+
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "/app/app.jar"]

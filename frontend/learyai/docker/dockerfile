@@ -1,0 +1,28 @@
+#
+# 当前文件职责：为 frontend/learyai 定义仅依赖本目录上下文的前端构建与 Nginx 静态产物运行镜像。
+#
+FROM node:22.22.1-alpine AS builder
+
+WORKDIR /app
+
+RUN corepack enable && corepack prepare pnpm@10.30.3 --activate
+
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY tsconfig.json tsconfig.app.json tsconfig.node.json ./
+COPY vite.config.ts vitest.config.ts capacitor.config.ts eslint.config.js index.html ./
+COPY public ./public
+COPY src ./src
+COPY packages ./packages
+
+RUN pnpm install --frozen-lockfile
+RUN pnpm run build
+
+FROM nginx:1.27-alpine AS runner
+
+COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
+COPY docker/40-write-runtime-config.sh /docker-entrypoint.d/40-write-runtime-config.sh
+COPY --from=builder /app/dist /usr/share/nginx/html
+
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]

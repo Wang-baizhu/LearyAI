@@ -1,0 +1,11 @@
+# 当前文件职责：为 test-internal-kb 覆盖 backend 镜像标签与拉取策略。
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: leary-backend
+spec:
+  template:
+    spec:
+      containers:
+        - name: leary-backend
+          imagePullPolicy: IfNotPresent

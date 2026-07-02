@@ -1,0 +1,64 @@
+# 当前文件职责：部署 Python agent_ws（WebSocket 服务）。
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: leary-agent
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: leary-agent
+  template:
+    metadata:
+      labels:
+        app: leary-agent
+    spec:
+      containers:
+        - name: leary-agent
+          image: leary-agent:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: ws
+              containerPort: 8081
+          envFrom:
+            - configMapRef:
+                name: leary-agent-config
+            - secretRef:
+                name: leary-agent-secret
+          volumeMounts:
+            - name: agent-logs
+              mountPath: /app/logs
+            - name: kimi-logs
+              mountPath: /root/.kimi/logs
+            - name: agent-workdir
+              mountPath: /app/workdir
+          startupProbe:
+            httpGet:
+              path: /healthz/startup
+              port: ws
+            failureThreshold: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /healthz/ready
+              port: ws
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /healthz/live
+              port: ws
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: "1"
+              memory: 1Gi
+      volumes:
+        - name: agent-logs
+          emptyDir: {}
+        - name: kimi-logs
+          emptyDir: {}
+        - name: agent-workdir
+          emptyDir: {}

@@ -1,0 +1,15 @@
+# 当前文件职责：为 PostgreSQL exporter 暴露 Prometheus 抓取端口。
+apiVersion: v1
+kind: Service
+metadata:
+  name: leary-postgres-exporter
+  namespace: observability
+  labels:
+    app: leary-postgres-exporter
+spec:
+  selector:
+    app: leary-postgres-exporter
+  ports:
+    - name: metrics
+      port: 9187
+      targetPort: metrics

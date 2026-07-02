@@ -1,0 +1,48 @@
+# 当前文件职责：统一暴露 backend API、agent websocket 与插件预览入口。
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: leary-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
+spec:
+  ingressClassName: nginx
+  rules:
+    - http:
+        paths:
+          - path: /preview
+            pathType: Prefix
+            backend:
+              service:
+                name: leary-plugin-gateway
+                port:
+                  number: 7999
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: leary-backend
+                port:
+                  number: 8080
+          - path: /sse
+            pathType: Prefix
+            backend:
+              service:
+                name: leary-backend
+                port:
+                  number: 8080
+          - path: /agent/ws
+            pathType: Prefix
+            backend:
+              service:
+                name: leary-agent
+                port:
+                  number: 8081
+          - path: /agent/query
+            pathType: Prefix
+            backend:
+              service:
+                name: leary-agent
+                port:
+                  number: 8081

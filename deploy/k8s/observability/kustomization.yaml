@@ -1,0 +1,99 @@
+# 当前文件职责：聚合 learyAI 日志观测组件（Loki + Fluent Bit）的 Kustomize 资源。
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+namespace: observability
+
+resources:
+  - namespace.yaml
+  - loki-configmap.yaml
+  - loki-rules-configmap.yaml
+  - loki-service.yaml
+  - loki-statefulset.yaml
+  - fluent-bit-rbac.yaml
+  - fluent-bit-configmap.yaml
+  - fluent-bit-daemonset.yaml
+  - servicemonitor-learyai.yaml
+  - prometheus-rules.yaml
+  - postgres-exporter-deployment.yaml
+  - postgres-exporter-service.yaml
+  - redis-exporter-deployment.yaml
+  - redis-exporter-service.yaml
+  - rabbitmq-exporter-deployment.yaml
+  - rabbitmq-exporter-service.yaml
+  - servicemonitor-infra.yaml
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+secretGenerator:
+  - name: leary-postgres-exporter-secret
+    envs:
+      - secret.env
+  - name: leary-redis-exporter-secret
+    envs:
+      - secret.env
+  - name: leary-rabbitmq-exporter-secret
+    envs:
+      - secret.env
+
+configMapGenerator:
+  - name: leary-grafana-datasources
+    files:
+      - datasources.yaml=grafana-datasources.yaml
+    options:
+      labels:
+        grafana_datasource: "1"
+  - name: leary-grafana-dashboard-java
+    files:
+      - java.json=grafana-dashboards/grafana-java-dashboard.json
+    options:
+      labels:
+        grafana_dashboard: "1"
+  - name: leary-grafana-dashboard-python-overview
+    files:
+      - python-overview.json=grafana-dashboards/grafana-python-overview-dashboard.json
+    options:
+      labels:
+        grafana_dashboard: "1"
+  - name: leary-grafana-dashboard-agent-ws
+    files:
+      - agent-ws.json=grafana-dashboards/grafana-agent-ws-dashboard.json
+    options:
+      labels:
+        grafana_dashboard: "1"
+  - name: leary-grafana-dashboard-kb-server
+    files:
+      - kb-server.json=grafana-dashboards/grafana-kb-server-dashboard.json
+    options:
+      labels:
+        grafana_dashboard: "1"
+  - name: leary-grafana-dashboard-tasks-server
+    files:
+      - tasks-server.json=grafana-dashboards/grafana-tasks-server-dashboard.json
+    options:
+      labels:
+        grafana_dashboard: "1"
+  - name: leary-grafana-dashboard-logs
+    files:
+      - logs.json=grafana-dashboards/grafana-logs-dashboard.json
+    options:
+      labels:
+        grafana_dashboard: "1"
+  - name: leary-grafana-dashboard-postgres
+    files:
+      - postgres.json=grafana-dashboards/grafana-postgres-dashboard.json
+    options:
+      labels:
+        grafana_dashboard: "1"
+  - name: leary-grafana-dashboard-redis
+    files:
+      - redis.json=grafana-dashboards/grafana-redis-dashboard.json
+    options:
+      labels:
+        grafana_dashboard: "1"
+  - name: leary-grafana-dashboard-rabbitmq
+    files:
+      - rabbitmq.json=grafana-dashboards/grafana-rabbitmq-dashboard.json
+    options:
+      labels:
+        grafana_dashboard: "1"

@@ -1,0 +1,43 @@
+# 当前文件职责：部署 PostgreSQL exporter，将集群内 PG 指标暴露给 Prometheus。
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: leary-postgres-exporter
+  namespace: observability
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: leary-postgres-exporter
+  template:
+    metadata:
+      labels:
+        app: leary-postgres-exporter
+    spec:
+      containers:
+        - name: postgres-exporter
+          image: quay.io/prometheuscommunity/postgres-exporter:v0.15.0
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: metrics
+              containerPort: 9187
+          env:
+            - name: DATA_SOURCE_URI
+              value: leary-postgres.learyai.svc.cluster.local:5432/learyai_test?sslmode=disable
+            - name: DATA_SOURCE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: leary-postgres-exporter-secret
+                  key: DATA_SOURCE_USER
+            - name: DATA_SOURCE_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: leary-postgres-exporter-secret
+                  key: DATA_SOURCE_PASS
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 250m
+              memory: 256Mi

@@ -1,0 +1,18 @@
+version: 1
+agent:
+  extend: ./agent.yaml
+  system_prompt_args:
+    ROLE_ADDITIONAL: |
+      你现在以子代理（subagent）身份运行。所有标记为 `user` 的消息都是由主代理转发的。主代理无法看到你的上下文，它只能在你完成任务时看到你发出的最后一条消息。你需要在最终消息中，对你做了什么以及你学到了什么做一个全面总结。当你能完整完成主agent的更新任务时，简短总结回复即可。
+  exclude_tools:
+    - "kimi_cli.tools.think:Think"
+    # - "kimi_cli.tools.agent:Agent"
+    # - "kimi_cli.tools.ask_user:AskUserQuestion"
+    # - "kimi_cli.tools.file:ReadFile"
+    # - "kimi_cli.tools.file:ReadMediaFile"
+    # - "kimi_cli.tools.file:Glob"
+    # - "kimi_cli.tools.file:Grep"
+    # - "kimi_cli.tools.file:WriteFile"
+    # - "kimi_cli.tools.file:StrReplaceFile"
+    # 注释的已在subagent配置
+  subagents: # make sure no subagents are provided

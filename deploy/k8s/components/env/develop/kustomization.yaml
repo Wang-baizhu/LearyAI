@@ -1,0 +1,30 @@
+# 当前文件职责：生成 develop 环境的业务 ConfigMap/Secret。
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: learyai
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+configMapGenerator:
+  - name: leary-backend-config
+    envs:
+      - backend-config.env
+  - name: leary-agent-config
+    envs:
+      - agent-config.env
+  - name: leary-task-config
+    envs:
+      - taskserver-config.env
+
+secretGenerator:
+  - name: leary-backend-secret
+    envs:
+      - backend-secret.env
+  - name: leary-agent-secret
+    envs:
+      - agent-secret.env
+  - name: leary-task-secret
+    envs:
+      - taskserver-secret.env

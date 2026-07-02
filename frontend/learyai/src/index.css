@@ -1,0 +1,120 @@
+/* index.css 负责定义全局滚动条与主题切换过渡样式。 */
+@source "../node_modules/streamdown/dist/*.js";
+@source "../node_modules/@streamdown/math/dist/*.js";
+
+.custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+.dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; }
+.custom-scrollbar { scrollbar-width: thin; scrollbar-color: #e2e8f0 transparent; }
+.dark .custom-scrollbar { scrollbar-color: #334155 transparent; }
+
+:root {
+  --theme-transition-x: 50vw;
+  --theme-transition-y: 50vh;
+  --theme-transition-r: 0px;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+html[data-theme-transition='to-dark']::view-transition-old(root) {
+  z-index: 1;
+  animation: theme-light-to-dark 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+html[data-theme-transition='to-dark']::view-transition-new(root) {
+  z-index: 0;
+}
+
+html[data-theme-transition='to-light']::view-transition-new(root) {
+  z-index: 1;
+  animation: theme-dark-to-light 520ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+html[data-theme-transition='to-light']::view-transition-old(root) {
+  z-index: 0;
+}
+
+@keyframes theme-light-to-dark {
+  from {
+    clip-path: circle(var(--theme-transition-r) at var(--theme-transition-x) var(--theme-transition-y));
+  }
+  to {
+    clip-path: circle(0px at var(--theme-transition-x) var(--theme-transition-y));
+  }
+}
+
+@keyframes theme-dark-to-light {
+  from {
+    clip-path: circle(0px at var(--theme-transition-x) var(--theme-transition-y));
+  }
+  to {
+    clip-path: circle(var(--theme-transition-r) at var(--theme-transition-x) var(--theme-transition-y));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-theme-transition='to-dark']::view-transition-old(root),
+  html[data-theme-transition='to-light']::view-transition-new(root) {
+    animation-duration: 1ms;
+  }
+}
+
+@keyframes toast-slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(110%) scale(0.96);
+    filter: saturate(0.88);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+    filter: saturate(1);
+  }
+}
+
+.toast-ring {
+  transform: rotate(-90deg);
+  opacity: 0.6;
+}
+
+.toast-ring circle {
+  stroke-dasharray: 62.8;
+  stroke-dashoffset: 62.8;
+  animation: toast-ring-draw 1.2s ease-out both;
+}
+
+@keyframes toast-ring-draw {
+  0% {
+    stroke-dashoffset: 62.8;
+    opacity: 0.25;
+  }
+  60% {
+    stroke-dashoffset: 0;
+    opacity: 0.9;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0.25;
+  }
+}
+
+.toast-progress {
+  transform-origin: left center;
+  animation: toast-progress-shrink linear forwards;
+}
+
+@keyframes toast-progress-shrink {
+  from {
+    transform: scaleX(1);
+    opacity: 0.95;
+  }
+  to {
+    transform: scaleX(0);
+    opacity: 0.4;
+  }
+}

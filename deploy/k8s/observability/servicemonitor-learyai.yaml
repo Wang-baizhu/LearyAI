@@ -1,0 +1,48 @@
+# 当前文件职责：声明 learyai 命名空间业务服务的 Prometheus 抓取规则（基于 Prometheus Operator 的 ServiceMonitor）。
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: learyai-services
+  namespace: observability
+  labels:
+    release: kps
+spec:
+  namespaceSelector:
+    matchNames:
+      - learyai
+  selector:
+    matchExpressions:
+      - key: app
+        operator: In
+        values:
+          - leary-backend
+          - leary-agent
+          - leary-task
+  endpoints:
+    - port: http
+      path: /actuator/prometheus
+      interval: 15s
+      honorLabels: true
+      relabelings:
+        - targetLabel: env
+          replacement: server
+        - targetLabel: job
+          replacement: learyai-java
+    - port: ws
+      path: /metrics
+      interval: 15s
+      honorLabels: true
+      relabelings:
+        - targetLabel: env
+          replacement: server
+        - targetLabel: job
+          replacement: learyai-agent-ws
+    - port: metrics
+      path: /metrics
+      interval: 15s
+      honorLabels: true
+      relabelings:
+        - targetLabel: env
+          replacement: server
+        - targetLabel: job
+          replacement: learyai-tasks-server

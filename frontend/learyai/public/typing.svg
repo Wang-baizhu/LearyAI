@@ -1,0 +1,14 @@
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="加载中">
+  <circle cx="12" cy="12" r="5" fill="#00D1C1">
+    <animate
+      attributeName="opacity"
+      values="0.25;1;0.25"
+      dur="1.2s"
+      repeatCount="indefinite" />
+    <animate
+      attributeName="r"
+      values="4;6;4"
+      dur="1.2s"
+      repeatCount="indefinite" />
+  </circle>
+</svg>

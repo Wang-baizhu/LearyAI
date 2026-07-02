@@ -1,0 +1,110 @@
+# 当前文件职责：提供 learyAI 应用与基础设施的基础 Prometheus 告警规则。
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: learyai-platform-rules
+  namespace: observability
+  labels:
+    release: kps
+spec:
+  groups:
+    - name: learyai.workload.rules
+      rules:
+        - alert: LearyDeploymentUnavailable
+          expr: kube_deployment_status_replicas_unavailable{namespace="learyai",deployment=~"leary-backend|leary-agent|leary-task"} > 0
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "业务 Deployment 存在不可用副本"
+            description: "{{ $labels.deployment }} 在 learyai 命名空间存在不可用副本。"
+        - alert: LearyPodCrashLooping
+          expr: increase(kube_pod_container_status_restarts_total{namespace="learyai",container=~"leary-backend|leary-agent|leary-task"}[15m]) >= 3
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "业务 Pod 重启频繁"
+            description: "{{ $labels.pod }} 在 15 分钟内重启次数异常。"
+        - alert: LearyContainerHighCpu
+          expr: sum by (pod, container) (rate(container_cpu_usage_seconds_total{namespace="learyai",container=~"leary-backend|leary-agent|leary-task",image!=""}[5m])) > 0.8
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "业务容器 CPU 使用率过高"
+            description: "{{ $labels.container }} CPU 持续高于 0.8 core。"
+        - alert: LearyContainerHighMemory
+          expr: (container_memory_working_set_bytes{namespace="learyai",container=~"leary-backend|leary-agent|leary-task",image!=""} / container_spec_memory_limit_bytes{namespace="learyai",container=~"leary-backend|leary-agent|leary-task",image!=""}) > 0.9
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "业务容器内存使用率过高"
+            description: "{{ $labels.container }} 内存使用率持续超过 90%。"
+        - alert: LearyBackendErrorRateHigh
+          expr: (sum(rate(http_server_requests_seconds_count{namespace="learyai",app="leary-backend",status=~"5.."}[5m])) / sum(rate(http_server_requests_seconds_count{namespace="learyai",app="leary-backend"}[5m]))) > 0.05
+          for: 10m
+          labels:
+            severity: critical
+          annotations:
+            summary: "backend 5xx 错误率过高"
+            description: "leary-backend 在最近 5 分钟内 5xx 比例超过 5%。"
+    - name: learyai.infra.rules
+      rules:
+        - alert: LearyPostgresTooManyConnections
+          expr: pg_stat_activity_count{namespace="learyai",datname="learyai_test",state="active"} > 50
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "PostgreSQL 活跃连接偏高"
+            description: "leary-postgres 活跃连接数持续高于 50。"
+        - alert: LearyPostgresLongTransaction
+          expr: max(pg_stat_activity_max_tx_duration{namespace="learyai"}) > 300
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "PostgreSQL 长事务"
+            description: "存在持续超过 300 秒的事务。"
+        - alert: LearyPostgresDiskNearFull
+          expr: (kubelet_volume_stats_used_bytes{namespace="learyai",persistentvolumeclaim=~"data-leary-postgres-0"} / kubelet_volume_stats_capacity_bytes{namespace="learyai",persistentvolumeclaim=~"data-leary-postgres-0"}) > 0.85
+          for: 15m
+          labels:
+            severity: critical
+          annotations:
+            summary: "PostgreSQL PVC 空间不足"
+            description: "PostgreSQL PVC 使用率超过 85%。"
+        - alert: LearyRedisMemoryNearLimit
+          expr: (redis_memory_used_bytes{namespace="learyai"} / redis_config_maxmemory{namespace="learyai"}) > 0.85
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Redis 内存接近上限"
+            description: "Redis 内存使用率持续超过 85%。"
+        - alert: LearyRedisTooManyClients
+          expr: redis_connected_clients{namespace="learyai"} > 200
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Redis 连接数偏高"
+            description: "Redis 连接数持续高于 200。"
+        - alert: LearyRabbitQueueBacklog
+          expr: max(rabbitmq_queue_messages_ready{namespace="learyai"}) > 1000
+          for: 10m
+          labels:
+            severity: critical
+          annotations:
+            summary: "RabbitMQ 队列堆积"
+            description: "存在队列 ready 消息数持续高于 1000。"
+        - alert: LearyRabbitQueueNoConsumers
+          expr: min(rabbitmq_queue_consumers{namespace="learyai"}) < 1
+          for: 10m
+          labels:
+            severity: warning
+          annotations:
+            summary: "RabbitMQ 队列无消费者"
+            description: "存在队列持续没有消费者。"

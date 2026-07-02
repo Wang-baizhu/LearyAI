@@ -1,0 +1,8 @@
+# 当前文件职责：定义 Grafana 在 K8s 集群内自动加载的补充数据源（当前仅补充 Loki，Prometheus 由 kube-prometheus-stack 自带）。
+apiVersion: 1
+datasources:
+  - name: Loki
+    type: loki
+    access: proxy
+    url: http://loki.observability.svc.cluster.local:3100
+    editable: true

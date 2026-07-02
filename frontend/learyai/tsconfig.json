@@ -1,0 +1,50 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false,
+    "module": "ESNext",
+    "lib": [
+      "ES2022",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "skipLibCheck": true,
+    "types": [
+      "node"
+    ],
+    "moduleResolution": "bundler",
+    "isolatedModules": true,
+    "moduleDetection": "force",
+    "allowJs": true,
+    "jsx": "react-jsx",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ],
+      "@leary/ui": [
+        "./packages/ui/index.ts"
+      ],
+      "@leary/template-plugin-sdk-core": [
+        "./packages/template/plugin-sdk-core/index.ts"
+      ],
+      "@leary/template-plugin-sdk-host": [
+        "./packages/template/plugin-sdk-host/index.ts"
+      ],
+      "@leary/template-ppt-runtime": [
+        "./packages/template/ppt-runtime/index.ts"
+      ],
+      "@leary/template-plugin-sdk-react": [
+        "./packages/template/plugin-sdk-react/index.ts"
+      ],
+      "@leary/template-plugin-sdk-react/content": [
+        "./packages/template/plugin-sdk-react/content.ts"
+      ],
+      "@templates/*": [
+        "./src/modules/template/*"
+      ]
+    },
+    "allowImportingTsExtensions": true,
+    "noEmit": true
+  }
+}

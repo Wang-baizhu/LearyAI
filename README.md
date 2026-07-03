@@ -16,7 +16,7 @@
 
 ## What It Is
 
-`learyAI` 是一个基于Agentic Rag的AI知识库应用，该项目为Monorepo。
+`learyAI` 是一个基于Agentic Rag的AI知识库应用，支持溯源、预览、用户成员管理等功能。
 
 - `backend`：Java Spring Boot 主后端，负责业务接口与核心服务编排
 - `python-backend`：Python 侧 agent / task / kb 运行时

@@ -1,12 +1,15 @@
-# LearyAI
+<p align="center">
+  <img src="./frontend/learyai/public/icon-animate.svg" alt="LearyAI" width="120" />
+</p>
+
+<h1 align="center">LearyAI</h1>
 
 <p align="center">
-  一个面向 AI 应用编排、知识库接入、任务执行与插件预览的全栈工程仓库。
+  一个基于Agentic Rag的AI知识库应用。
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Java-Spring%20Boot-1f2937?style=for-the-badge" alt="Java Spring Boot" />
-  <img src="https://img.shields.io/badge/Python-Agent%20%26%20Task-0f766e?style=for-the-badge" alt="Python Agent and Task" />
   <img src="https://img.shields.io/badge/Frontend-React%20%2B%20Vite-b45309?style=for-the-badge" alt="React and Vite" />
   <img src="https://img.shields.io/badge/Infra-Docker%20Compose-1d4ed8?style=for-the-badge" alt="Docker Compose" />
 </p>
